@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "M0k1Een9HJY7DwaRGIsFKRgPP10vcZGqzVMF2I5qAEArQQ792FT17ITMrjD5jSbcDwf74iFoGKQWwZ1bAa529g==",
+  "success": true,
+  "projectFilePath": "/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/Assignment2 - Maze.csproj",
+  "expectedPackageFiles": [
+    "/Users/tyler/.nuget/packages/monogame.content.builder.task/3.8.1.303/monogame.content.builder.task.3.8.1.303.nupkg.sha512",
+    "/Users/tyler/.nuget/packages/monogame.framework.desktopgl/3.8.1.303/monogame.framework.desktopgl.3.8.1.303.nupkg.sha512"
+  ],
+  "logs": []
+}
