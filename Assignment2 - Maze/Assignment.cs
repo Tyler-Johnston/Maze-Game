@@ -44,24 +44,44 @@ namespace CS5410
             {
                 Exit();
             }
+
             var currentKeyboardState = Keyboard.GetState();
-                
+            Vector2 newPosition = maze.PlayerPosition;
+
             if (currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyUp(Keys.Right))
             {
-                maze.PlayerPosition += new Vector2(1, 0);
+                newPosition += new Vector2(1, 0);
             }
             if (currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyUp(Keys.Left))
             {
-                maze.PlayerPosition += new Vector2(-1, 0);
+                newPosition += new Vector2(-1, 0);
             }
             if (currentKeyboardState.IsKeyDown(Keys.Up) && previousKeyboardState.IsKeyUp(Keys.Up))
             {
-                maze.PlayerPosition += new Vector2(0, -1);
+                newPosition += new Vector2(0, -1);
             }
             if (currentKeyboardState.IsKeyDown(Keys.Down) && previousKeyboardState.IsKeyUp(Keys.Down))
             {
-                maze.PlayerPosition += new Vector2(0, 1);
+                newPosition += new Vector2(0, 1);
             }
+
+            // Check if the new position is within the maze bounds
+            if (newPosition.X >= 0 && newPosition.X < maze.width && newPosition.Y >= 0 && newPosition.Y < maze.height)
+            {
+                // Check for walls in the maze at the new position
+                if (maze.CanMoveTo(newPosition))
+                {
+                    maze.PlayerPosition = newPosition;
+                }
+            }
+
+            // Toggle display of the shortest path on 'P' key press
+            if (currentKeyboardState.IsKeyDown(Keys.P) && previousKeyboardState.IsKeyUp(Keys.P))
+            {
+                maze.displayShortestPath = !maze.displayShortestPath;
+            }
+
+
             previousKeyboardState = currentKeyboardState;
             base.Update(gameTime);
         }
@@ -70,7 +90,7 @@ namespace CS5410
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             m_spriteBatch.Begin();
-            maze.Draw(m_spriteBatch, wallTexture, m_ness);
+            maze.Draw(m_spriteBatch, wallTexture, GraphicsDevice, m_ness);
             m_spriteBatch.End();
             base.Draw(gameTime);
         }

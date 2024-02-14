@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Assignment2 - Maze")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bc15169f3bd1ee6cf1b5bc36bbc4974e26da3593")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9ea7a2656715b4930c9739f58a99bd4dd288708a")]
 [assembly: System.Reflection.AssemblyProductAttribute("Assignment2 - Maze")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Assignment2 - Maze")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

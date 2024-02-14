@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 public class Maze
 {
     private Cell[,] cells;
-    private int width, height;
+    public int width, height;
     private Random rand = new Random();
     private const int TOP = 0;
     private const int RIGHT = 1;
@@ -15,6 +15,7 @@ public class Maze
     private const int LEFT = 3;
     private List<Vector2> shortestPath;
     private Vector2 playerPosition;
+    public bool displayShortestPath = false;
 
     public Maze(int width, int height)
     {
@@ -25,6 +26,13 @@ public class Maze
         shortestPath = FindShortestPath();
         playerPosition = new Vector2(0, 0);
     }
+
+    public Vector2 PlayerPosition
+    {
+        get { return playerPosition; }
+        set { playerPosition = value; }
+    }
+
     private void InitializeCells()
     {
         cells = new Cell[width, height];
@@ -183,11 +191,28 @@ public class Maze
         }
     }
 
-        public Vector2 PlayerPosition
-        {
-            get { return playerPosition; }
-            set { playerPosition = value; }
-        }
+    public bool CanMoveTo(Vector2 newPosition)
+    {
+        int x = (int)playerPosition.X;
+        int y = (int)playerPosition.Y;
+        int newX = (int)newPosition.X;
+        int newY = (int)newPosition.Y;
+
+        // Ensure newPosition is adjacent to the current position
+        if (Math.Abs(newX - x) + Math.Abs(newY - y) != 1) return false;
+
+        // If there is a wall in the way, return false
+        if (newX > x && cells[x, y].Walls[RIGHT]) return false;
+        if (newX < x && cells[x, y].Walls[LEFT]) return false;
+        if (newY > y && cells[x, y].Walls[BOTTOM]) return false;
+        if (newY < y && cells[x, y].Walls[TOP]) return false;
+
+        // If trying to move outside the maze, return false
+        if (newX < 0 || newY < 0 || newX >= width || newY >= height) return false;
+
+        return true;
+    }
+
 
     public List<Vector2> FindShortestPath()
     {
@@ -233,18 +258,26 @@ public class Maze
         return shortestPath;
     }
 
-    public void Draw(SpriteBatch spriteBatch, Texture2D wallTexture, Texture2D m_ness)
+    public void Draw(SpriteBatch spriteBatch, Texture2D wallTexture, GraphicsDevice graphicsDevice, Texture2D m_ness)
     {
         int cellSize = 30;
         Color wallColor = Color.Black;
         Color pathColor = Color.LightGreen;
 
+        // Calculate total size of the maze
+        int mazeWidth = width * cellSize;
+        int mazeHeight = height * cellSize;
+
+        // Calculate the starting position to center the maze
+        int offsetX = (graphicsDevice.Viewport.Width - mazeWidth) / 2;
+        int offsetY = (graphicsDevice.Viewport.Height - mazeHeight) / 2;
+
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                Vector2 position = new Vector2(x * cellSize, y * cellSize);
-                if (shortestPath.Contains(new Vector2(x, y)))
+                Vector2 position = new Vector2(x * cellSize + offsetX, y * cellSize + offsetY);
+                if (displayShortestPath && shortestPath.Contains(new Vector2(x, y)))
                 {
                     spriteBatch.Draw(wallTexture, new Rectangle((int)position.X, (int)position.Y, cellSize, cellSize), pathColor);
                 }
@@ -265,11 +298,7 @@ public class Maze
                     spriteBatch.Draw(wallTexture, new Rectangle((int)position.X, (int)position.Y, 1, cellSize), wallColor);
                 }
                 float scale = (float)cellSize / Math.Max(m_ness.Width, m_ness.Height);
-
-                // Convert playerPosition from cell coordinates to screen coordinates
-                Vector2 playerScreenPosition = new Vector2(playerPosition.X * cellSize, playerPosition.Y * cellSize);
-
-                // Draw the player texture at the current player position with scaling
+                Vector2 playerScreenPosition = new Vector2(playerPosition.X * cellSize + offsetX, playerPosition.Y * cellSize + offsetY);
                 spriteBatch.Draw(m_ness, playerScreenPosition, null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
             }
         }
