@@ -82,6 +82,7 @@ namespace CS5410
                         maze.shortestPath.Push(previousPosition);
                     }
                     maze.PlayerPosition = newPosition;
+                    maze.breadcrumbs.Add(newPosition);
                 }
             }
 
@@ -100,6 +101,12 @@ namespace CS5410
             if (currentKeyboardState.IsKeyDown(Keys.H) && previousKeyboardState.IsKeyUp(Keys.H))
             {
                 maze.displayHint = !maze.displayHint;
+            }
+
+            // Toggle breadcrumb  display
+            if (currentKeyboardState.IsKeyDown(Keys.B) && previousKeyboardState.IsKeyUp(Keys.B))
+            {
+                maze.displayBreadcrumbs = !maze.displayBreadcrumbs;
             }
 
             previousKeyboardState = currentKeyboardState;

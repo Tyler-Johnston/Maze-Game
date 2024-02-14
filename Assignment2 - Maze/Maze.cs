@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 public class Maze
 {
-    private Cell[,] cells;
+    public Cell[,] cells;
     public int width, height;
     private Random rand = new Random();
     private const int TOP = 0;
@@ -14,10 +14,13 @@ public class Maze
     private const int BOTTOM = 2;
     private const int LEFT = 3;
     public Stack<Vector2> shortestPath;
+
+    public HashSet<Vector2> breadcrumbs;
     public Vector2 hint;
     private Vector2 playerPosition;
     public bool displayShortestPath = false;
     public bool displayHint = false;
+    public bool displayBreadcrumbs = false;
 
     public Maze(int width, int height)
     {
@@ -27,6 +30,7 @@ public class Maze
         GenerateMaze();
         shortestPath = FindShortestPath();
         playerPosition = new Vector2(0, 0);
+        breadcrumbs = new HashSet<Vector2>();
     }
 
     public Vector2 PlayerPosition
@@ -255,7 +259,6 @@ public class Maze
                 shortestPath.Push(at.Value);
             }
         }
-
         return shortestPath;
     }
 
@@ -265,6 +268,7 @@ public class Maze
         Color wallColor = Color.Black;
         Color pathColor = Color.LightGreen;
         Color hintColor = Color.Pink;
+        Color breadColor = Color.Yellow;
 
         // Calculate total size of the maze
         int mazeWidth = width * cellSize;
@@ -279,6 +283,10 @@ public class Maze
             for (int y = 0; y < height; y++)
             {
                 Vector2 position = new Vector2(x * cellSize + offsetX, y * cellSize + offsetY);
+                if (displayBreadcrumbs && breadcrumbs.Contains(new Vector2(x,y)))
+                {
+                    spriteBatch.Draw(wallTexture, new Rectangle((int)position.X, (int)position.Y, cellSize, cellSize), breadColor);
+                }
                 if (displayHint && hint == new Vector2(x, y))
                 {
                     spriteBatch.Draw(wallTexture, new Rectangle((int)position.X, (int)position.Y, cellSize, cellSize), hintColor);
