@@ -5,8 +5,10 @@
   <Config />
   <SourceFiles>
     <File>/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/Content/Images/ness.png</File>
+    <File>/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/Content/Images/mrsaturn.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
   </DestFiles>
 </SourceFileCollection>

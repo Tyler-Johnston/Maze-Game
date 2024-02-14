@@ -14,8 +14,10 @@ public class Maze
     private const int BOTTOM = 2;
     private const int LEFT = 3;
     public Stack<Vector2> shortestPath;
+    public Vector2 hint;
     private Vector2 playerPosition;
     public bool displayShortestPath = false;
+    public bool displayHint = false;
 
     public Maze(int width, int height)
     {
@@ -213,7 +215,6 @@ public class Maze
         return true;
     }
 
-
     public Stack<Vector2> FindShortestPath()
     {
         // Initialize data structures for BFS
@@ -258,11 +259,12 @@ public class Maze
         return shortestPath;
     }
 
-    public void Draw(SpriteBatch spriteBatch, Texture2D wallTexture, GraphicsDevice graphicsDevice, Texture2D m_ness)
+    public void Draw(SpriteBatch spriteBatch, Texture2D wallTexture, GraphicsDevice graphicsDevice, Texture2D m_ness, Texture2D m_mrsaturn)
     {
         int cellSize = 30;
         Color wallColor = Color.Black;
         Color pathColor = Color.LightGreen;
+        Color hintColor = Color.Pink;
 
         // Calculate total size of the maze
         int mazeWidth = width * cellSize;
@@ -277,6 +279,10 @@ public class Maze
             for (int y = 0; y < height; y++)
             {
                 Vector2 position = new Vector2(x * cellSize + offsetX, y * cellSize + offsetY);
+                if (displayHint && hint == new Vector2(x, y))
+                {
+                    spriteBatch.Draw(wallTexture, new Rectangle((int)position.X, (int)position.Y, cellSize, cellSize), hintColor);
+                }
                 if (displayShortestPath && shortestPath.Contains(new Vector2(x, y)))
                 {
                     spriteBatch.Draw(wallTexture, new Rectangle((int)position.X, (int)position.Y, cellSize, cellSize), pathColor);
