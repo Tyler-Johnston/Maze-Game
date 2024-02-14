@@ -26,3 +26,5 @@
 /Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/obj/Debug/net6.0/Assignment2 - Maze.sourcelink.json
 /Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/bin/Debug/net6.0/Content/Images/ness.xnb
 /Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/bin/Debug/net6.0/Content/Images/mrsaturn.xnb
+/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/bin/Debug/net6.0/Content/Images/starman.xnb
+/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/bin/Debug/net6.0/Content/Images/dog.xnb

@@ -13,6 +13,8 @@ namespace CS5410
         private Texture2D wallTexture;
         private Texture2D m_ness;
         private Texture2D m_mrsaturn;
+        private Texture2D m_starman;
+        private Texture2D m_dog;
         private KeyboardState previousKeyboardState = Keyboard.GetState();
 
         public Assignment()
@@ -35,9 +37,10 @@ namespace CS5410
             wallTexture = new Texture2D(GraphicsDevice, 1, 1);
             wallTexture.SetData(new[] { Color.White });
 
-            // TODO: use this.Content to load your game content here
             m_ness = this.Content.Load<Texture2D>("Images/ness");
             m_mrsaturn = this.Content.Load<Texture2D>("Images/mrsaturn");
+            m_starman = this.Content.Load<Texture2D>("Images/starman");
+            m_dog = this.Content.Load<Texture2D>("Images/dog");
         }
 
         protected override void Update(GameTime gameTime)
@@ -117,7 +120,7 @@ namespace CS5410
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             m_spriteBatch.Begin();
-            maze.Draw(m_spriteBatch, wallTexture, GraphicsDevice, m_ness, m_mrsaturn);
+            maze.Draw(m_spriteBatch, wallTexture, GraphicsDevice, m_ness, m_mrsaturn, m_starman, m_dog);
             m_spriteBatch.End();
             base.Draw(gameTime);
         }

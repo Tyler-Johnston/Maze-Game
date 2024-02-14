@@ -30,7 +30,10 @@ public class Maze
         GenerateMaze();
         shortestPath = FindShortestPath();
         playerPosition = new Vector2(0, 0);
-        breadcrumbs = new HashSet<Vector2>();
+        breadcrumbs = new HashSet<Vector2>
+        {
+            new Vector2(0, 0)
+        };
     }
 
     public Vector2 PlayerPosition
@@ -262,13 +265,11 @@ public class Maze
         return shortestPath;
     }
 
-    public void Draw(SpriteBatch spriteBatch, Texture2D wallTexture, GraphicsDevice graphicsDevice, Texture2D m_ness, Texture2D m_mrsaturn)
+    public void Draw(SpriteBatch spriteBatch, Texture2D wallTexture, GraphicsDevice graphicsDevice, Texture2D m_ness, Texture2D m_mrsaturn, Texture2D m_starman, Texture2D m_dog)
     {
         int cellSize = 30;
         Color wallColor = Color.Black;
         Color pathColor = Color.LightGreen;
-        Color hintColor = Color.Pink;
-        Color breadColor = Color.Yellow;
 
         // Calculate total size of the maze
         int mazeWidth = width * cellSize;
@@ -285,15 +286,18 @@ public class Maze
                 Vector2 position = new Vector2(x * cellSize + offsetX, y * cellSize + offsetY);
                 if (displayBreadcrumbs && breadcrumbs.Contains(new Vector2(x,y)))
                 {
-                    spriteBatch.Draw(wallTexture, new Rectangle((int)position.X, (int)position.Y, cellSize, cellSize), breadColor);
+                    float scaleForMrSaturn = cellSize / (float)Math.Max(m_mrsaturn.Width, m_mrsaturn.Height);
+                    spriteBatch.Draw(m_mrsaturn, position, null, Color.White, 0f, Vector2.Zero, scaleForMrSaturn, SpriteEffects.None, 0f);
                 }
                 if (displayHint && hint == new Vector2(x, y))
                 {
-                    spriteBatch.Draw(wallTexture, new Rectangle((int)position.X, (int)position.Y, cellSize, cellSize), hintColor);
+                    float scaleForStarman = cellSize / (float)Math.Max(m_starman.Width, m_starman.Height);
+                    spriteBatch.Draw(m_starman, position, null, Color.White, 0f, Vector2.Zero, scaleForStarman, SpriteEffects.None, 0f);
                 }
                 if (displayShortestPath && shortestPath.Contains(new Vector2(x, y)))
                 {
-                    spriteBatch.Draw(wallTexture, new Rectangle((int)position.X, (int)position.Y, cellSize, cellSize), pathColor);
+                    float scaleForDog = cellSize / (float)Math.Max(m_dog.Width, m_dog.Height);
+                    spriteBatch.Draw(m_dog, position, null, Color.White, 0f, Vector2.Zero, scaleForDog, SpriteEffects.None, 0f);
                 }
                 if (cells[x, y].Walls[TOP])
                 {
