@@ -14,6 +14,8 @@ public class Maze
     private const int BOTTOM = 2;
     private const int LEFT = 3;
     private List<Vector2> shortestPath;
+    private Vector2 playerPosition;
+
     public Maze(int width, int height)
     {
         this.width = width;
@@ -21,6 +23,7 @@ public class Maze
         InitializeCells();
         GenerateMaze();
         shortestPath = FindShortestPath();
+        playerPosition = new Vector2(0, 0);
     }
     private void InitializeCells()
     {
@@ -39,7 +42,7 @@ public class Maze
     {
         List<Vector2> frontier = new List<Vector2>();
         // choose 0,0 as the starting position
-        cells[0,0].Visited = true;
+        cells[0,0].InMaze = true;
         // add the starting cells neighbors to the frontier
         AddFrontiers(0,0, frontier);
 
@@ -50,11 +53,11 @@ public class Maze
             Vector2 randomFrontierCell = frontier[randomIndex];
             // randomly select a wall from that cell that is also connected with any wall that is part of the maze & remove it
             RemoveWalls((int)randomFrontierCell.X, (int)randomFrontierCell.Y);
-            // that frontier cell is now visited / in the maze
-            cells[(int)randomFrontierCell.X, (int)randomFrontierCell.Y].Visited = true;
+            // that frontier cell is now InMaze / in the maze
+            cells[(int)randomFrontierCell.X, (int)randomFrontierCell.Y].InMaze = true;
             // remove that cell from the frontier as it is now in the maze
             frontier.RemoveAt(randomIndex);
-            // After marking the cell as visited and removing walls, add its unvisited neighbors to the frontier
+            // After marking the cell as InMaze and removing walls, add its unInMaze neighbors to the frontier
             AddFrontiers((int)randomFrontierCell.X, (int)randomFrontierCell.Y, frontier);
         }
     }
@@ -63,19 +66,19 @@ public class Maze
     {
         List<Vector2> neighbors = new List<Vector2>();
 
-        if (x + 1 < width && cells[x+1,y].Visited)
+        if (x + 1 < width && cells[x+1,y].InMaze)
         {
             neighbors.Add(new Vector2(x + 1, y));
         }
-        if (x - 1 >= 0 && cells[x-1,y].Visited)
+        if (x - 1 >= 0 && cells[x-1,y].InMaze)
         {
             neighbors.Add(new Vector2(x - 1, y));
         }
-        if (y + 1 < height && cells[x,y+1].Visited)
+        if (y + 1 < height && cells[x,y+1].InMaze)
         {
             neighbors.Add(new Vector2(x, y + 1));
         }
-        if (y - 1 >= 0 && cells[x,y-1].Visited)
+        if (y - 1 >= 0 && cells[x,y-1].InMaze)
         {
             neighbors.Add(new Vector2(x, y - 1));
         }
@@ -86,19 +89,19 @@ public class Maze
     {
         List<Vector2> neighbors = new List<Vector2>();
 
-        if (x + 1 < width && !cells[x+1,y].Visited)
+        if (x + 1 < width && !cells[x+1,y].InMaze)
         {
             neighbors.Add(new Vector2(x + 1, y));
         }
-        if (x - 1 >= 0 && !cells[x-1,y].Visited)
+        if (x - 1 >= 0 && !cells[x-1,y].InMaze)
         {
             neighbors.Add(new Vector2(x - 1, y));
         }
-        if (y + 1 < height && !cells[x,y+1].Visited)
+        if (y + 1 < height && !cells[x,y+1].InMaze)
         {
             neighbors.Add(new Vector2(x, y + 1));
         }
-        if (y - 1 >= 0 && !cells[x,y-1].Visited)
+        if (y - 1 >= 0 && !cells[x,y-1].InMaze)
         {
             neighbors.Add(new Vector2(x, y - 1));
         }
@@ -130,7 +133,7 @@ public class Maze
         List<Vector2> neighbors = GetNeighborsNotInMaze(x,y);
         foreach (var neighbor in neighbors)
         {
-            if ((!cells[(int)neighbor.X, (int)neighbor.Y].Visited) && (!frontier.Contains(neighbor)))
+            if ((!cells[(int)neighbor.X, (int)neighbor.Y].InMaze) && (!frontier.Contains(neighbor)))
             {
                 frontier.Add(neighbor);
             }
@@ -180,6 +183,12 @@ public class Maze
         }
     }
 
+        public Vector2 PlayerPosition
+        {
+            get { return playerPosition; }
+            set { playerPosition = value; }
+        }
+
     public List<Vector2> FindShortestPath()
     {
         // Initialize data structures for BFS
@@ -191,7 +200,7 @@ public class Maze
 
         // Start by enqueuing the start position
         queue.Enqueue(start);
-        prev[start] = null; // The start has no previous node
+        prev[start] = null;
 
         while (queue.Count > 0)
         {
@@ -201,7 +210,7 @@ public class Maze
             if (current == end)
                 break;
 
-            // Get the accessible neighbors (where there's no wall in between)
+            // Get the accessible neighbors where there's no wall in between
             foreach (Vector2 neighbor in GetAccessibleNeighbors(current))
             {
                 if (!prev.ContainsKey(neighbor))
@@ -224,9 +233,9 @@ public class Maze
         return shortestPath;
     }
 
-    public void Draw(SpriteBatch spriteBatch, Texture2D wallTexture)
+    public void Draw(SpriteBatch spriteBatch, Texture2D wallTexture, Texture2D m_ness)
     {
-        int cellSize = 20;
+        int cellSize = 30;
         Color wallColor = Color.Black;
         Color pathColor = Color.LightGreen;
 
@@ -255,6 +264,13 @@ public class Maze
                 {
                     spriteBatch.Draw(wallTexture, new Rectangle((int)position.X, (int)position.Y, 1, cellSize), wallColor);
                 }
+                float scale = (float)cellSize / Math.Max(m_ness.Width, m_ness.Height);
+
+                // Convert playerPosition from cell coordinates to screen coordinates
+                Vector2 playerScreenPosition = new Vector2(playerPosition.X * cellSize, playerPosition.Y * cellSize);
+
+                // Draw the player texture at the current player position with scaling
+                spriteBatch.Draw(m_ness, playerScreenPosition, null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
             }
         }
     }

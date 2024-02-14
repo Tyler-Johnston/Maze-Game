@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -10,6 +11,8 @@ namespace CS5410
         private SpriteBatch m_spriteBatch;
         private Maze maze;
         private Texture2D wallTexture;
+        private Texture2D m_ness;
+        private KeyboardState previousKeyboardState = Keyboard.GetState();
 
         public Assignment()
         {
@@ -21,7 +24,7 @@ namespace CS5410
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            maze = new Maze(25, 25);
+            maze = new Maze(5, 5);
             base.Initialize();
         }
 
@@ -32,6 +35,7 @@ namespace CS5410
             wallTexture.SetData(new[] { Color.White });
 
             // TODO: use this.Content to load your game content here
+            m_ness = this.Content.Load<Texture2D>("Images/ness");
         }
 
         protected override void Update(GameTime gameTime)
@@ -40,9 +44,25 @@ namespace CS5410
             {
                 Exit();
             }
-
-            // TODO: Add your update logic here
-
+            var currentKeyboardState = Keyboard.GetState();
+                
+            if (currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyUp(Keys.Right))
+            {
+                maze.PlayerPosition += new Vector2(1, 0);
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyUp(Keys.Left))
+            {
+                maze.PlayerPosition += new Vector2(-1, 0);
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.Up) && previousKeyboardState.IsKeyUp(Keys.Up))
+            {
+                maze.PlayerPosition += new Vector2(0, -1);
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.Down) && previousKeyboardState.IsKeyUp(Keys.Down))
+            {
+                maze.PlayerPosition += new Vector2(0, 1);
+            }
+            previousKeyboardState = currentKeyboardState;
             base.Update(gameTime);
         }
 
@@ -50,10 +70,11 @@ namespace CS5410
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             m_spriteBatch.Begin();
-            maze.Draw(m_spriteBatch, wallTexture);
+            maze.Draw(m_spriteBatch, wallTexture, m_ness);
             m_spriteBatch.End();
             base.Draw(gameTime);
         }
+        
     }
 
 }
