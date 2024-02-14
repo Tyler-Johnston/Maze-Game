@@ -13,7 +13,7 @@ public class Maze
     private const int RIGHT = 1;
     private const int BOTTOM = 2;
     private const int LEFT = 3;
-    private List<Vector2> shortestPath;
+    public Stack<Vector2> shortestPath;
     private Vector2 playerPosition;
     public bool displayShortestPath = false;
 
@@ -214,12 +214,12 @@ public class Maze
     }
 
 
-    public List<Vector2> FindShortestPath()
+    public Stack<Vector2> FindShortestPath()
     {
         // Initialize data structures for BFS
         Queue<Vector2> queue = new Queue<Vector2>();
         Dictionary<Vector2, Vector2?> prev = new Dictionary<Vector2, Vector2?>();
-        List<Vector2> shortestPath = new List<Vector2>();
+        Stack<Vector2> shortestPath = new Stack<Vector2>();
         Vector2 start = new Vector2(0, 0);
         Vector2 end = new Vector2(width - 1, height - 1);
 
@@ -251,10 +251,10 @@ public class Maze
         {
             for (Vector2? at = end; at != null; at = prev[at.Value])
             {
-                shortestPath.Add(at.Value);
+                shortestPath.Push(at.Value);
             }
-            shortestPath.Reverse();
         }
+
         return shortestPath;
     }
 

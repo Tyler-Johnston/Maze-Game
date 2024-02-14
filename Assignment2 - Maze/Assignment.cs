@@ -47,6 +47,7 @@ namespace CS5410
 
             var currentKeyboardState = Keyboard.GetState();
             Vector2 newPosition = maze.PlayerPosition;
+            Vector2 previousPosition = maze.PlayerPosition;
 
             if (currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyUp(Keys.Right))
             {
@@ -68,12 +69,21 @@ namespace CS5410
             // Check if the new position is within the maze bounds
             if (newPosition.X >= 0 && newPosition.X < maze.width && newPosition.Y >= 0 && newPosition.Y < maze.height)
             {
-                // Check for walls in the maze at the new position
                 if (maze.CanMoveTo(newPosition))
                 {
+                    if (!maze.shortestPath.Contains(newPosition) && maze.CanMoveTo(newPosition))
+                    {
+                        maze.shortestPath.Push(previousPosition);
+                    }
                     maze.PlayerPosition = newPosition;
                 }
             }
+
+            if (maze.shortestPath.Contains(maze.PlayerPosition))
+            {
+                maze.shortestPath.Pop();
+            }
+
 
             // Toggle display of the shortest path on 'P' key press
             if (currentKeyboardState.IsKeyDown(Keys.P) && previousKeyboardState.IsKeyUp(Keys.P))
