@@ -23,7 +23,7 @@ namespace CS5410
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            maze = new Maze(10, 10); // Example dimensions
+            maze = new Maze(10, 10);
             base.Initialize();
         }
 
@@ -52,7 +52,7 @@ namespace CS5410
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             m_spriteBatch.Begin();
-            // maze.Draw(m_spriteBatch, wallTexture);
+            maze.Draw(m_spriteBatch, wallTexture);
             m_spriteBatch.End();
             base.Draw(gameTime);
         }
@@ -76,7 +76,6 @@ namespace CS5410
             InitializeCells();
             GenerateMaze();
         }
-
         private void InitializeCells()
         {
             cells = new Cell[width, height];
@@ -94,62 +93,26 @@ namespace CS5410
         {
             List<Vector2> frontier = new List<Vector2>();
             // choose 0,0 as the starting position
-            cells[1,1].Visited = true;
-            // add the starting cells neighbors to the fronteir
-            AddFrontiers(1,1, frontier);
-            // radnomly choose a cell in the frontier
-            Vector2 randomFrontierCell = frontier[rand.Next(0, frontier.Count)];
-            // randomly select a wall from that cell that is also connected with any wall that is part of the maze
-            // then remove that wall
+            cells[0,0].Visited = true;
+            // add the starting cells neighbors to the frontier
+            AddFrontiers(0,0, frontier);
 
-            foreach (var frontee in frontier)
+            while (frontier.Count > 0)
             {
-                Console.WriteLine(frontee);
+                // randomly choose a cell in the frontier
+                int randomIndex = rand.Next(0, frontier.Count);
+                Vector2 randomFrontierCell = frontier[randomIndex];
+                // randomly select a wall from that cell that is also connected with any wall that is part of the maze & remove it
+                RemoveWalls((int)randomFrontierCell.X, (int)randomFrontierCell.Y);
+                // that frontier cell is now visited / in the maze
+                cells[(int)randomFrontierCell.X, (int)randomFrontierCell.Y].Visited = true;
+                // remove that cell from the frontier as it is now in the maze
+                frontier.RemoveAt(randomIndex);
+                // After marking the cell as visited and removing walls, add its unvisited neighbors to the frontier
+                AddFrontiers((int)randomFrontierCell.X, (int)randomFrontierCell.Y, frontier);
             }
-            RemoveWalls((int)randomFrontierCell.X, (int)randomFrontierCell.Y);
-            
 
-
-
-
-            // do
-            // {
-
-
-            // } while (frontier.Count > 0);
-
-
-
-
-
-
-
-            // int startX = 0;
-            // int startY = 0;
-            // frontier.Add(new Vector2(startX, startY));
-            // cells[startX, startY].Visited = true;
-            // while (frontier.Count > 0)
-            // {
-            //     // Choose a random frontier cell
-            //     int randIndex = rand.Next(frontier.Count);
-            //     Vector2 currentCell = frontier[randIndex];
-            //     frontier.RemoveAt(randIndex);
-            //     List<Vector2> neighbors = GetNeighbors((int)currentCell.X, (int)currentCell.Y);
-
-            //     if (neighbors.Count > 0)
-            //     {
-            //         // Choose a random neighbor
-            //         Vector2 neighbor = neighbors[rand.Next(neighbors.Count)];
-            //         // Remove the wall between the current cell and the chosen neighbor
-            //         RemoveWalls((int)currentCell.X, (int)currentCell.Y, (int)neighbor.X, (int)neighbor.Y);
-
-            //         // Mark the neighbor as visited and add its frontiers to the list
-            //         cells[(int)neighbor.X, (int)neighbor.Y].Visited = true;
-            //         AddFrontiers((int)neighbor.X, (int)neighbor.Y, frontier);
-            //     }
-            // }
         }
-
         private List<Vector2> GetNeighborsInMaze(int x, int y)
         {
             List<Vector2> neighbors = new List<Vector2>();
@@ -170,7 +133,6 @@ namespace CS5410
             {
                 neighbors.Add(new Vector2(x, y - 1));
             }
-
             return neighbors;
         }
 
@@ -218,33 +180,31 @@ namespace CS5410
             int cellInMazeX = (int)randomCellInMaze.X;
             int cellInMazeY = (int)randomCellInMaze.Y;
 
-            Console.WriteLine("fronteir cell x/y: " + frontierCellX + " " + frontierCellY);
-            Console.WriteLine("cell in maze x/y: " + cellInMazeX + " " + cellInMazeY);
+            if (neighbors.Count == 0)
+            {
+                return;
+            }
 
             if (frontierCellX - cellInMazeX == 1) // Neighbor is below the current cell
             {
-                Console.WriteLine("Neighbor is below the current cell");
-                // cells[cellInMazeX, cellInMazeY].Walls[2] = false; // Remove current cell's bottom wall
-                // cells[frontierCellX, frontierCellY].Walls[0] = false; // Remove neighbor's top wall
+                cells[cellInMazeX, cellInMazeY].Walls[2] = false; // Remove current cell's bottom wall
+                cells[frontierCellX, frontierCellY].Walls[0] = false; // Remove neighbor's top wall
             }
-            else if (frontierCellX - cellInMazeX == -1) // Neighbor is above the current cell
+            if (frontierCellX - cellInMazeX == -1) // Neighbor is above the current cell
             {
-                Console.WriteLine("Neighbor is above the current cell");
-                // cells[cellInMazeX, cellInMazeY].Walls[0] = false; // Remove current cell's top wall
-                // cells[frontierCellX, frontierCellY].Walls[2] = false; // Remove neighbor's bottom wall
+                cells[cellInMazeX, cellInMazeY].Walls[0] = false; // Remove current cell's top wall
+                cells[frontierCellX, frontierCellY].Walls[2] = false; // Remove neighbor's bottom wall
             }
 
             if (frontierCellY - cellInMazeY == 1) // Neighbor is to the right of the current cell
             {
-                Console.WriteLine("Neighbor is to the right of the current cell");
-                // cells[cellInMazeX, cellInMazeY].Walls[1] = false; // Remove current cell's right wall
-                // cells[frontierCellX, frontierCellY].Walls[3] = false; // Remove neighbor's left wall
+                cells[cellInMazeX, cellInMazeY].Walls[1] = false; // Remove current cell's right wall
+                cells[frontierCellX, frontierCellY].Walls[3] = false; // Remove neighbor's left wall
             }
-            else if (frontierCellY - cellInMazeY == -1) // Neighbor is to the left of the current cell
+            if (frontierCellY - cellInMazeY == -1) // Neighbor is to the left of the current cell
             {
-                Console.WriteLine("Neighbor is to the left of the current cell");
-                // cells[cellInMazeX, cellInMazeY].Walls[3] = false; // Remove current cell's left wall
-                // cells[frontierCellX, frontierCellY].Walls[1] = false; // Remove neighbor's right wall
+                cells[cellInMazeX, cellInMazeY].Walls[3] = false; // Remove current cell's left wall
+                cells[frontierCellX, frontierCellY].Walls[1] = false; // Remove neighbor's right wall
             }
         }
 
@@ -285,6 +245,48 @@ namespace CS5410
                     }
                 }
             }
+        }
+
+        public bool VerifyMaze(out List<Vector2> unreachableCells)
+        {
+            unreachableCells = new List<Vector2>(); // List to store unreachable cells
+            bool[,] visited = new bool[width, height];
+            Stack<Vector2> stack = new Stack<Vector2>();
+            stack.Push(new Vector2(0, 0)); // Assuming the entrance is at the top-left cell
+
+            while (stack.Count > 0)
+            {
+                Vector2 current = stack.Pop();
+                int x = (int)current.X;
+                int y = (int)current.Y;
+
+                // If we have already visited this cell, skip it
+                if (visited[x, y])
+                    continue;
+
+                // Mark this cell as visited
+                visited[x, y] = true;
+
+                // Check all adjacent cells that are connected (i.e., no wall between them)
+                if (!cells[x, y].Walls[0] && y > 0) stack.Push(new Vector2(x, y - 1)); // Top
+                if (!cells[x, y].Walls[1] && x < width - 1) stack.Push(new Vector2(x + 1, y)); // Right
+                if (!cells[x, y].Walls[2] && y < height - 1) stack.Push(new Vector2(x, y + 1)); // Bottom
+                if (!cells[x, y].Walls[3] && x > 0) stack.Push(new Vector2(x - 1, y)); // Left
+            }
+
+            // Check if all cells were visited
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    if (!visited[i, j])
+                    {
+                        unreachableCells.Add(new Vector2(i, j)); // Add the cell to the list of unreachable cells
+                    }
+                }
+            }
+
+            return unreachableCells.Count == 0; // Maze is perfect if there are no unreachable cells
         }
 
     }
