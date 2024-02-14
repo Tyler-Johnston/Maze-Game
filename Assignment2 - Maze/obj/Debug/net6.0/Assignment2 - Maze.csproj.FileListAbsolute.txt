@@ -23,3 +23,4 @@
 /Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/obj/Debug/net6.0/Assignment2 - Maze.pdb
 /Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/obj/Debug/net6.0/Assignment2 - Maze.genruntimeconfig.cache
 /Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/obj/Debug/net6.0/ref/Assignment2 - Maze.dll
+/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/obj/Debug/net6.0/Assignment2 - Maze.sourcelink.json
