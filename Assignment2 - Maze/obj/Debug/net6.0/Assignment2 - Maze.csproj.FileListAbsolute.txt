@@ -28,3 +28,7 @@
 /Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/bin/Debug/net6.0/Content/Images/mrsaturn.xnb
 /Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/bin/Debug/net6.0/Content/Images/starman.xnb
 /Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/bin/Debug/net6.0/Content/Images/dog.xnb
+/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/bin/Debug/net6.0/Content/Images/background.xnb
+/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/bin/Debug/net6.0/Content/Images/grass.xnb
+/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/bin/Debug/net6.0/Content/Fonts/DemoFont1.xnb
+/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/bin/Debug/net6.0/Content/Fonts/PixelifySans.xnb
