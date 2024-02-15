@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -8,10 +10,11 @@ namespace CS5410
     public class Assignment : Game
     {
         private GraphicsDeviceManager m_graphics;
-        public enum GameState
+        private enum GameState
         {
             MainMenu,
             Playing,
+            HighScores,
             Credits
         }
         private GameState currentState = GameState.MainMenu;
@@ -29,12 +32,18 @@ namespace CS5410
         private SpriteFont m_font;
         private bool acceptInput = true;
         private KeyboardState previousKeyboardState = Keyboard.GetState();
+        private DateTime startTime;
+        private TimeSpan elapsedTime;
+        private List<Dictionary<string, object>> highScores = new List<Dictionary<string, object>>();
+        private bool highScoreRecorded = false;
+
 
         public Assignment()
         {
             m_graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            elapsedTime = TimeSpan.Zero;
         }
 
         protected override void Initialize()
@@ -72,6 +81,8 @@ namespace CS5410
                 maze = new Maze(5, 5);
                 currentState = GameState.Playing;
                 acceptInput = true;
+                startTime = DateTime.Now;
+                highScoreRecorded = false;
             }
 
             // New Game 10x10
@@ -80,6 +91,8 @@ namespace CS5410
                 maze = new Maze(10, 10);
                 currentState = GameState.Playing;
                 acceptInput = true;
+                startTime = DateTime.Now;
+                highScoreRecorded = false;
             }
 
             // New Game 15x15
@@ -88,6 +101,8 @@ namespace CS5410
                 maze = new Maze(15, 15);
                 currentState = GameState.Playing;
                 acceptInput = true;
+                startTime = DateTime.Now;
+                highScoreRecorded = false;
             }
 
             // New Game 20x20
@@ -96,14 +111,14 @@ namespace CS5410
                 maze = new Maze(20, 20);
                 currentState = GameState.Playing;
                 acceptInput = true;
+                startTime = DateTime.Now;
+                highScoreRecorded = false;
             }
 
             // Display High Scores
             if (currentKeyboardState.IsKeyDown(Keys.F5) && previousKeyboardState.IsKeyUp(Keys.F5))
             {
-                // Placeholder for displaying high scores
-                // This could toggle a boolean flag that you check in Draw to display scores
-                Console.WriteLine("Display High Scores - implement UI update accordingly");
+                currentState = GameState.HighScores;
             }
 
             // Display Credits
@@ -118,15 +133,6 @@ namespace CS5410
                 maze = null;
                 currentState = GameState.MainMenu;
             }
-
-            if (currentState == GameState.MainMenu)
-            {
-                if (currentKeyboardState.IsKeyDown(Keys.Enter) && previousKeyboardState.IsKeyUp(Keys.Enter))
-                {
-                    currentState = GameState.Playing;
-                    maze = new Maze(5, 5);
-                }
-            }
             else if (currentState == GameState.Playing)
             {
 
@@ -134,6 +140,8 @@ namespace CS5410
                 {
                     Vector2 newPosition = maze.playerPosition;
                     Vector2 previousPosition = maze.playerPosition;
+                    elapsedTime = DateTime.Now - startTime;
+                    
                     if (maze.shortestPath.Count > 0)
                     {
                         maze.hint = maze.shortestPath.Peek();
@@ -192,11 +200,29 @@ namespace CS5410
                     }
                 }
                 // check win condition and stop the user from being able to move
-                if (maze.playerPosition == new Vector2(maze.width - 1, maze.height - 1))
+                if (maze.playerPosition == new Vector2(maze.width - 1, maze.height - 1) && !maze.gameWon)
                 {
                     maze.gameWon = true;
                     acceptInput = false;
+
+                    // Only add to high scores if not already recorded for this game
+                    if (!highScoreRecorded)
+                    {
+                        // Add the current game's score and time to the high scores list
+                        var scoreEntry = new Dictionary<string, object>
+                        {
+                            { "score", 0 }, // Score is 0 for now
+                            { "time", elapsedTime } // Elapsed time of current game
+                        };
+                        highScores.Add(scoreEntry);
+
+                        // Optional: Sort the highScores list based on time or score
+                        highScores = highScores.OrderBy(entry => entry["time"]).ToList();
+
+                        highScoreRecorded = true; // Mark as recorded
+                    }
                 }
+
             }
 
             previousKeyboardState = currentKeyboardState;
@@ -255,10 +281,10 @@ namespace CS5410
                         m_spriteBatch.DrawString(m_font, winMessage, messagePosition, Color.Yellow);
                     }
                     // Top-centered text
-                    string playingText = "Current Maze";
-                    Vector2 playingTextSize = m_font.MeasureString(playingText);
+                    string timeText = $"Time: {elapsedTime.Minutes:D2}:{elapsedTime.Seconds:D2}";
+                    Vector2 playingTextSize = m_font.MeasureString(timeText);
                     Vector2 playingTextPosition = new Vector2((GraphicsDevice.Viewport.Width - playingTextSize.X) / 2, 5);
-                    DrawText(playingText, playingTextPosition, Color.Black, Color.Cornsilk);
+                    DrawText(timeText, playingTextPosition, Color.Black, Color.Cornsilk);
 
                     // Bottom-centered text
                     string bottomText = "F7 to navigate to main menu";
@@ -266,6 +292,19 @@ namespace CS5410
                     Vector2 bottomTextPosition = new Vector2((GraphicsDevice.Viewport.Width - bottomTextSize.X) / 2, GraphicsDevice.Viewport.Height - bottomTextSize.Y - 5); // 20 pixels from the bottom
                     DrawText(bottomText, bottomTextPosition, Color.Black, Color.Cornsilk);
                 }
+            }
+            else if (currentState == GameState.HighScores)
+            {
+                string highScoresText = "High Scores:\n";
+                foreach (var entry in highScores)
+                {
+                    TimeSpan time = (TimeSpan)entry["time"];
+                    highScoresText += $"Score: {entry["score"]}, Time: {time.Minutes:D2}:{time.Seconds:D2}\n";
+                }
+
+                Vector2 highScoresSize = m_font.MeasureString(highScoresText);
+                Vector2 highScoresPosition = new Vector2((GraphicsDevice.Viewport.Width - highScoresSize.X) / 2, (GraphicsDevice.Viewport.Height - highScoresSize.Y) / 2);
+                DrawText(highScoresText, highScoresPosition, Color.Black, Color.Cornsilk);
             }
             else if (currentState == GameState.Credits)
             {
