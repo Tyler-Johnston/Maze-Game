@@ -8,20 +8,21 @@ public class Maze
 {
     public Cell[,] cells;
     public int width, height;
+    public Vector2 playerPosition;
+    public Stack<Vector2> shortestPath;
+
+    public HashSet<Vector2> breadcrumbs;
+    public Vector2 hint;
+    public bool displayShortestPath = false;
+    public bool displayHint = false;
+    public bool displayBreadcrumbs = false;
+    public bool gameWon = false;
     private Random rand = new Random();
     private const int TOP = 0;
     private const int RIGHT = 1;
     private const int BOTTOM = 2;
     private const int LEFT = 3;
     private const int m_cellSize = 30;
-    public Stack<Vector2> shortestPath;
-
-    public HashSet<Vector2> breadcrumbs;
-    public Vector2 hint;
-    private Vector2 playerPosition;
-    public bool displayShortestPath = false;
-    public bool displayHint = false;
-    public bool displayBreadcrumbs = false;
 
     public Maze(int width, int height)
     {
@@ -35,12 +36,6 @@ public class Maze
         {
             new Vector2(0, 0)
         };
-    }
-
-    public Vector2 PlayerPosition
-    {
-        get { return playerPosition; }
-        set { playerPosition = value; }
     }
 
     private void InitializeCells()
@@ -266,7 +261,7 @@ public class Maze
         return shortestPath;
     }
 
-    public void Draw(SpriteBatch spriteBatch, Texture2D wallTexture, GraphicsDevice graphicsDevice, Texture2D m_ness, Texture2D m_mrsaturn, Texture2D m_dog, Texture2D m_grass)
+    public void Draw(SpriteBatch spriteBatch, Texture2D wallTexture, GraphicsDevice graphicsDevice, Texture2D m_ness, Texture2D m_mrsaturn, Texture2D m_dog, Texture2D m_grass, Texture2D m_poo)
     {
         Color wallColor = Color.Black;
 
@@ -284,6 +279,7 @@ public class Maze
             {
                 Vector2 position = new Vector2(x * m_cellSize + offsetX, y * m_cellSize + offsetY);
                 spriteBatch.Draw(m_grass, new Rectangle((int)position.X, (int)position.Y, m_cellSize, m_cellSize), Color.White);
+                float scaleForMrSaturn = m_cellSize / (float)Math.Max(m_mrsaturn.Width, m_mrsaturn.Height);
                 if (displayShortestPath && shortestPath.Contains(new Vector2(x, y)))
                 {
                     float scaleForDog = m_cellSize / (float)Math.Max(m_dog.Width, m_dog.Height);
@@ -291,12 +287,10 @@ public class Maze
                 }
                 if (displayBreadcrumbs && breadcrumbs.Contains(new Vector2(x,y)))
                 {
-                    float scaleForMrSaturn = m_cellSize / (float)Math.Max(m_mrsaturn.Width, m_mrsaturn.Height);
                     spriteBatch.Draw(m_mrsaturn, position, null, Color.White, 0f, Vector2.Zero, scaleForMrSaturn, SpriteEffects.None, 0f);
                 }
                 if (displayHint && hint == new Vector2(x, y))
                 {
-                    float scaleForMrSaturn = m_cellSize / (float)Math.Max(m_mrsaturn.Width, m_mrsaturn.Height);
                     spriteBatch.Draw(m_mrsaturn, position, null, Color.White, 0f, Vector2.Zero, scaleForMrSaturn, SpriteEffects.None, 0f);
                 }
                 if (cells[x, y].Walls[TOP])
@@ -318,6 +312,10 @@ public class Maze
                 float scale = (float)m_cellSize / Math.Max(m_ness.Width, m_ness.Height);
                 Vector2 playerScreenPosition = new Vector2(playerPosition.X * m_cellSize + offsetX, playerPosition.Y * m_cellSize + offsetY);
                 spriteBatch.Draw(m_ness, playerScreenPosition, null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+
+                Vector2 exitPosition = new Vector2((width - 1) * m_cellSize + offsetX, (height - 1) * m_cellSize + offsetY);
+                float scaleForPoo = m_cellSize / (float)Math.Max(m_poo.Width, m_poo.Height);
+                spriteBatch.Draw(m_poo, exitPosition, null, Color.White, 0f, Vector2.Zero, scaleForPoo, SpriteEffects.None, 0f);
             }
         }
     }

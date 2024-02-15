@@ -32,3 +32,4 @@
 /Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/bin/Debug/net6.0/Content/Images/grass.xnb
 /Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/bin/Debug/net6.0/Content/Fonts/DemoFont1.xnb
 /Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/bin/Debug/net6.0/Content/Fonts/PixelifySans.xnb
+/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/bin/Debug/net6.0/Content/Images/poo.xnb

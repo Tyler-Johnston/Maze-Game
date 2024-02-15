@@ -8,25 +8,25 @@ namespace CS5410
     public class Assignment : Game
     {
         private GraphicsDeviceManager m_graphics;
-
         public enum GameState
         {
             MainMenu,
             Playing
         }
         private GameState currentState = GameState.MainMenu;
-
         private SpriteBatch m_spriteBatch;
         private int m_cellSize = 30;
         private Maze maze;
         private Texture2D wallTexture;
         private Texture2D m_ness;
+        private Texture2D m_poo;
         private Texture2D m_mrsaturn;
         private Texture2D m_dog;
         private Texture2D m_background;
 
         private Texture2D m_grass;
         private SpriteFont m_font;
+        private bool acceptInput = true;
         private KeyboardState previousKeyboardState = Keyboard.GetState();
 
         public Assignment()
@@ -50,6 +50,7 @@ namespace CS5410
 
             m_ness = this.Content.Load<Texture2D>("Images/ness");
             m_mrsaturn = this.Content.Load<Texture2D>("Images/mrsaturn");
+            m_poo = this.Content.Load<Texture2D>("Images/poo");
             m_dog = this.Content.Load<Texture2D>("Images/dog");
             m_background = this.Content.Load<Texture2D>("Images/background");
             m_grass = this.Content.Load<Texture2D>("Images/grass");
@@ -69,6 +70,7 @@ namespace CS5410
             {
                 maze = new Maze(5, 5);
                 currentState = GameState.Playing;
+                acceptInput = true;
             }
 
             // New Game 10x10
@@ -76,6 +78,7 @@ namespace CS5410
             {
                 maze = new Maze(10, 10);
                 currentState = GameState.Playing;
+                acceptInput = true;
             }
 
             // New Game 15x15
@@ -83,6 +86,7 @@ namespace CS5410
             {
                 maze = new Maze(15, 15);
                 currentState = GameState.Playing;
+                acceptInput = true;
             }
 
             // New Game 20x20
@@ -90,6 +94,7 @@ namespace CS5410
             {
                 maze = new Maze(20, 20);
                 currentState = GameState.Playing;
+                acceptInput = true;
             }
 
             // Display High Scores
@@ -125,65 +130,73 @@ namespace CS5410
             }
             else if (currentState == GameState.Playing)
             {
-                Vector2 newPosition = maze.PlayerPosition;
-                Vector2 previousPosition = maze.PlayerPosition;
 
-                if (maze.shortestPath.Count > 0)
+                if (acceptInput) 
                 {
-                    maze.hint = maze.shortestPath.Peek();
-                }
-                if ((currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyUp(Keys.Right)) || (currentKeyboardState.IsKeyDown(Keys.D) && previousKeyboardState.IsKeyUp(Keys.D)))
-                {
-                    newPosition += new Vector2(1, 0);
-                }
-                if ((currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyUp(Keys.Left)) || (currentKeyboardState.IsKeyDown(Keys.A) && previousKeyboardState.IsKeyUp(Keys.A)))
-                {
-                    newPosition += new Vector2(-1, 0);
-                }
-                if ((currentKeyboardState.IsKeyDown(Keys.Up) && previousKeyboardState.IsKeyUp(Keys.Up)) || (currentKeyboardState.IsKeyDown(Keys.W) && previousKeyboardState.IsKeyUp(Keys.W)))
-                {
-                    newPosition += new Vector2(0, -1);
-                }
-                if ((currentKeyboardState.IsKeyDown(Keys.Down) && previousKeyboardState.IsKeyUp(Keys.Down)) || (currentKeyboardState.IsKeyDown(Keys.S) && previousKeyboardState.IsKeyUp(Keys.S)))
-                {
-                    newPosition += new Vector2(0, 1);
-                }
-
-                // Check if the new position is within the maze bounds
-                if (newPosition.X >= 0 && newPosition.X < maze.width && newPosition.Y >= 0 && newPosition.Y < maze.height)
-                {
-                    if (maze.CanMoveTo(newPosition))
+                    Vector2 newPosition = maze.playerPosition;
+                    Vector2 previousPosition = maze.playerPosition;
+                    if (maze.shortestPath.Count > 0)
                     {
-                        if (!maze.shortestPath.Contains(newPosition))
+                        maze.hint = maze.shortestPath.Peek();
+                    }
+                    if ((currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyUp(Keys.Right)) || (currentKeyboardState.IsKeyDown(Keys.D) && previousKeyboardState.IsKeyUp(Keys.D)))
+                    {
+                        newPosition += new Vector2(1, 0);
+                    }
+                    if ((currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyUp(Keys.Left)) || (currentKeyboardState.IsKeyDown(Keys.A) && previousKeyboardState.IsKeyUp(Keys.A)))
+                    {
+                        newPosition += new Vector2(-1, 0);
+                    }
+                    if ((currentKeyboardState.IsKeyDown(Keys.Up) && previousKeyboardState.IsKeyUp(Keys.Up)) || (currentKeyboardState.IsKeyDown(Keys.W) && previousKeyboardState.IsKeyUp(Keys.W)))
+                    {
+                        newPosition += new Vector2(0, -1);
+                    }
+                    if ((currentKeyboardState.IsKeyDown(Keys.Down) && previousKeyboardState.IsKeyUp(Keys.Down)) || (currentKeyboardState.IsKeyDown(Keys.S) && previousKeyboardState.IsKeyUp(Keys.S)))
+                    {
+                        newPosition += new Vector2(0, 1);
+                    }
+
+                    // Check if the new position is within the maze bounds
+                    if (newPosition.X >= 0 && newPosition.X < maze.width && newPosition.Y >= 0 && newPosition.Y < maze.height)
+                    {
+                        if (maze.CanMoveTo(newPosition))
                         {
-                            maze.shortestPath.Push(previousPosition);
+                            if (!maze.shortestPath.Contains(newPosition))
+                            {
+                                maze.shortestPath.Push(previousPosition);
+                            }
+                            maze.playerPosition = newPosition;
+                            maze.breadcrumbs.Add(newPosition);
                         }
-                        maze.PlayerPosition = newPosition;
-                        maze.breadcrumbs.Add(newPosition);
+                    }
+                    if (maze.shortestPath.Contains(maze.playerPosition))
+                    {
+                        maze.shortestPath.Pop();
+                    }
+
+                    // Toggle display of the shortest path on 'P' key press
+                    if (currentKeyboardState.IsKeyDown(Keys.P) && previousKeyboardState.IsKeyUp(Keys.P))
+                    {
+                        maze.displayShortestPath = !maze.displayShortestPath;
+                    }
+
+                    // Toggle hint display
+                    if (currentKeyboardState.IsKeyDown(Keys.H) && previousKeyboardState.IsKeyUp(Keys.H))
+                    {
+                        maze.displayHint = !maze.displayHint;
+                    }
+
+                    // Toggle breadcrumb  display
+                    if (currentKeyboardState.IsKeyDown(Keys.B) && previousKeyboardState.IsKeyUp(Keys.B))
+                    {
+                        maze.displayBreadcrumbs = !maze.displayBreadcrumbs;
                     }
                 }
-
-                if (maze.shortestPath.Contains(maze.PlayerPosition))
+                // check win condition and stop the user from being able to move
+                if (maze.playerPosition == new Vector2(maze.width - 1, maze.height - 1))
                 {
-                    maze.shortestPath.Pop();
-                }
-
-                // Toggle display of the shortest path on 'P' key press
-                if (currentKeyboardState.IsKeyDown(Keys.P) && previousKeyboardState.IsKeyUp(Keys.P))
-                {
-                    maze.displayShortestPath = !maze.displayShortestPath;
-                }
-
-                // Toggle hint display
-                if (currentKeyboardState.IsKeyDown(Keys.H) && previousKeyboardState.IsKeyUp(Keys.H))
-                {
-                    maze.displayHint = !maze.displayHint;
-                }
-
-                // Toggle breadcrumb  display
-                if (currentKeyboardState.IsKeyDown(Keys.B) && previousKeyboardState.IsKeyUp(Keys.B))
-                {
-                    maze.displayBreadcrumbs = !maze.displayBreadcrumbs;
+                    maze.gameWon = true;
+                    acceptInput = false;
                 }
             }
 
@@ -233,7 +246,15 @@ namespace CS5410
             {
                 if (maze != null)
                 {
-                    maze.Draw(m_spriteBatch, wallTexture, GraphicsDevice, m_ness, m_mrsaturn, m_dog, m_grass);
+                    maze.Draw(m_spriteBatch, wallTexture, GraphicsDevice, m_ness, m_mrsaturn, m_dog, m_grass, m_poo);
+
+                    if (maze.gameWon)
+                    {
+                        string winMessage = "You Won!";
+                        Vector2 messageSize = m_font.MeasureString(winMessage);
+                        Vector2 messagePosition = new Vector2(GraphicsDevice.Viewport.Width / 2 - messageSize.X / 2, GraphicsDevice.Viewport.Height / 2 - messageSize.Y / 2);
+                        m_spriteBatch.DrawString(m_font, winMessage, messagePosition, Color.Yellow);
+                    }
                     // Top-centered text
                     string playingText = "Current Maze";
                     Vector2 playingTextSize = m_font.MeasureString(playingText);
