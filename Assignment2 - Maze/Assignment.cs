@@ -11,7 +11,8 @@ namespace CS5410
         public enum GameState
         {
             MainMenu,
-            Playing
+            Playing,
+            Credits
         }
         private GameState currentState = GameState.MainMenu;
         private SpriteBatch m_spriteBatch;
@@ -108,9 +109,7 @@ namespace CS5410
             // Display Credits
             if (currentKeyboardState.IsKeyDown(Keys.F6) && previousKeyboardState.IsKeyUp(Keys.F6))
             {
-                // Placeholder for displaying credits
-                // This could toggle a boolean flag that you check in Draw to display credits
-                Console.WriteLine("Display Credits - implement UI update accordingly");
+                currentState = GameState.Credits;
             }
 
             // Back to Main Menu
@@ -237,7 +236,7 @@ namespace CS5410
 
             if (currentState == GameState.MainMenu)
             {
-                string menuText = "Earthbound Maze Game\nF1 - 5x5\nF2 - 10x10\nF3 - 15x15\nF4 - 20x20\nF5 - Display High Score\nF6 - Display Credits";
+                string menuText = "Earthbound Maze Game\nF1 - 5x5\nF2 - 10x10\nF3 - 15x15\nF4 - 20x20\nF5 - Display High Score\nF6 - Display Credits\nEsc - Exit";
                 Vector2 textSize = m_font.MeasureString(menuText);
                 Vector2 textPosition = new Vector2((GraphicsDevice.Viewport.Width - textSize.X) / 2, (GraphicsDevice.Viewport.Height - textSize.Y) / 2);
                 DrawText(menuText, textPosition, Color.Black, Color.Cornsilk);
@@ -267,6 +266,13 @@ namespace CS5410
                     Vector2 bottomTextPosition = new Vector2((GraphicsDevice.Viewport.Width - bottomTextSize.X) / 2, GraphicsDevice.Viewport.Height - bottomTextSize.Y - 5); // 20 pixels from the bottom
                     DrawText(bottomText, bottomTextPosition, Color.Black, Color.Cornsilk);
                 }
+            }
+            else if (currentState == GameState.Credits)
+            {
+                string creditsText = "Credits\nProgramming: Tyler Johnston\nArtwork: Nintendo";
+                Vector2 creditsSize = m_font.MeasureString(creditsText);
+                Vector2 creditsPosition = new Vector2((GraphicsDevice.Viewport.Width - creditsSize.X) / 2, (GraphicsDevice.Viewport.Height - creditsSize.Y) / 2);
+                DrawText(creditsText, creditsPosition, Color.Black, Color.Cornsilk);
             }
             m_spriteBatch.End();
             base.Draw(gameTime);
