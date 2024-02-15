@@ -67,14 +67,117 @@ namespace CS5410
             m_font = this.Content.Load<SpriteFont>("Fonts/PixelifySans");
         }
 
-        protected override void Update(GameTime gameTime)
+        private void processInGameInput(KeyboardState currentKeyboardState)
         {
+
+            if (!(currentState == GameState.Playing && acceptInput))
+            {
+                return;
+            }
+  
+            Vector2 newPosition = maze.playerPosition;
+            Vector2 previousPosition = maze.playerPosition;
+            elapsedTime = DateTime.Now - startTime;
+            
+            if (maze.shortestPath.Count > 0)
+            {
+                maze.hint = maze.shortestPath.Peek();
+            }
+            if ((currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyUp(Keys.Right)) || (currentKeyboardState.IsKeyDown(Keys.D) && previousKeyboardState.IsKeyUp(Keys.D)))
+            {
+                newPosition += new Vector2(1, 0);
+            }
+            if ((currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyUp(Keys.Left)) || (currentKeyboardState.IsKeyDown(Keys.A) && previousKeyboardState.IsKeyUp(Keys.A)))
+            {
+                newPosition += new Vector2(-1, 0);
+            }
+            if ((currentKeyboardState.IsKeyDown(Keys.Up) && previousKeyboardState.IsKeyUp(Keys.Up)) || (currentKeyboardState.IsKeyDown(Keys.W) && previousKeyboardState.IsKeyUp(Keys.W)))
+            {
+                newPosition += new Vector2(0, -1);
+            }
+            if ((currentKeyboardState.IsKeyDown(Keys.Down) && previousKeyboardState.IsKeyUp(Keys.Down)) || (currentKeyboardState.IsKeyDown(Keys.S) && previousKeyboardState.IsKeyUp(Keys.S)))
+            {
+                newPosition += new Vector2(0, 1);
+            }
+
+            // Check if the new position is within the maze bounds
+            if (newPosition.X >= 0 && newPosition.X < maze.width && newPosition.Y >= 0 && newPosition.Y < maze.height)
+            {
+                if (maze.CanMoveTo(newPosition))
+                {
+                    if (!maze.breadcrumbs.Contains(newPosition))
+                    {
+                        if (maze.shortestPath.Contains(newPosition))
+                        {
+                            maze.score += 5;
+                        }
+                        else
+                        {
+                            maze.score -= 2;
+                        }
+                    }
+                    if (!maze.shortestPath.Contains(newPosition))
+                    {
+                        maze.shortestPath.Push(previousPosition);
+                    }
+                    maze.playerPosition = newPosition;
+                    maze.breadcrumbs.Add(newPosition);
+                }
+            }
+            if (maze.shortestPath.Contains(maze.playerPosition))
+            {
+                maze.shortestPath.Pop();
+            }
+
+            // Toggle display of the shortest path on 'P' key press
+            if (currentKeyboardState.IsKeyDown(Keys.P) && previousKeyboardState.IsKeyUp(Keys.P))
+            {
+                maze.displayShortestPath = !maze.displayShortestPath;
+            }
+
+            // Toggle hint display
+            if (currentKeyboardState.IsKeyDown(Keys.H) && previousKeyboardState.IsKeyUp(Keys.H))
+            {
+                maze.displayHint = !maze.displayHint;
+            }
+
+            // Toggle breadcrumb  display
+            if (currentKeyboardState.IsKeyDown(Keys.B) && previousKeyboardState.IsKeyUp(Keys.B))
+            {
+                maze.displayBreadcrumbs = !maze.displayBreadcrumbs;
+            }
+            // check win condition and stop the user from being able to move
+            if (maze.playerPosition == new Vector2(maze.width - 1, maze.height - 1) && !maze.gameWon)
+            {
+                maze.gameWon = true;
+                acceptInput = false;
+
+                if (!highScoreRecorded)
+                {
+                    var scoreEntry = new Dictionary<string, object>
+                    {
+                        { "score", maze.score },
+                        { "time", elapsedTime },
+                        { "size", $"{maze.width}x{maze.height}" }
+                    };
+                    highScores.Add(scoreEntry);
+
+                    // Optional: Sort the highScores list based on time or score
+                    highScores = highScores.OrderBy(entry => entry["score"]).ToList();
+
+                    highScoreRecorded = true;
+                }
+            }
+        }
+
+        private void ProcessMainMenuInput(KeyboardState currentKeyboardState)
+        {
+            // Exit the maze game if the player presses "Esc"
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 Exit();
             }
 
-            var currentKeyboardState = Keyboard.GetState();
             // New Game 5x5
             if (currentKeyboardState.IsKeyDown(Keys.F1) && previousKeyboardState.IsKeyUp(Keys.F1))
             {
@@ -133,107 +236,13 @@ namespace CS5410
                 maze = null;
                 currentState = GameState.MainMenu;
             }
-            else if (currentState == GameState.Playing)
-            {
+        }
 
-                if (acceptInput) 
-                {
-                    Vector2 newPosition = maze.playerPosition;
-                    Vector2 previousPosition = maze.playerPosition;
-                    elapsedTime = DateTime.Now - startTime;
-                    
-                    if (maze.shortestPath.Count > 0)
-                    {
-                        maze.hint = maze.shortestPath.Peek();
-                    }
-                    if ((currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyUp(Keys.Right)) || (currentKeyboardState.IsKeyDown(Keys.D) && previousKeyboardState.IsKeyUp(Keys.D)))
-                    {
-                        newPosition += new Vector2(1, 0);
-                    }
-                    if ((currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyUp(Keys.Left)) || (currentKeyboardState.IsKeyDown(Keys.A) && previousKeyboardState.IsKeyUp(Keys.A)))
-                    {
-                        newPosition += new Vector2(-1, 0);
-                    }
-                    if ((currentKeyboardState.IsKeyDown(Keys.Up) && previousKeyboardState.IsKeyUp(Keys.Up)) || (currentKeyboardState.IsKeyDown(Keys.W) && previousKeyboardState.IsKeyUp(Keys.W)))
-                    {
-                        newPosition += new Vector2(0, -1);
-                    }
-                    if ((currentKeyboardState.IsKeyDown(Keys.Down) && previousKeyboardState.IsKeyUp(Keys.Down)) || (currentKeyboardState.IsKeyDown(Keys.S) && previousKeyboardState.IsKeyUp(Keys.S)))
-                    {
-                        newPosition += new Vector2(0, 1);
-                    }
-
-                    // Check if the new position is within the maze bounds
-                    if (newPosition.X >= 0 && newPosition.X < maze.width && newPosition.Y >= 0 && newPosition.Y < maze.height)
-                    {
-                        if (maze.CanMoveTo(newPosition))
-                        {
-                            if (!maze.breadcrumbs.Contains(newPosition))
-                            {
-                                if (maze.shortestPath.Contains(newPosition))
-                                {
-                                    maze.score += 5;
-                                }
-                                else
-                                {
-                                    maze.score -= 2;
-                                }
-                            }
-                            if (!maze.shortestPath.Contains(newPosition))
-                            {
-                                maze.shortestPath.Push(previousPosition);
-                            }
-                            maze.playerPosition = newPosition;
-                            maze.breadcrumbs.Add(newPosition);
-                        }
-                    }
-                    if (maze.shortestPath.Contains(maze.playerPosition))
-                    {
-                        maze.shortestPath.Pop();
-                    }
-
-                    // Toggle display of the shortest path on 'P' key press
-                    if (currentKeyboardState.IsKeyDown(Keys.P) && previousKeyboardState.IsKeyUp(Keys.P))
-                    {
-                        maze.displayShortestPath = !maze.displayShortestPath;
-                    }
-
-                    // Toggle hint display
-                    if (currentKeyboardState.IsKeyDown(Keys.H) && previousKeyboardState.IsKeyUp(Keys.H))
-                    {
-                        maze.displayHint = !maze.displayHint;
-                    }
-
-                    // Toggle breadcrumb  display
-                    if (currentKeyboardState.IsKeyDown(Keys.B) && previousKeyboardState.IsKeyUp(Keys.B))
-                    {
-                        maze.displayBreadcrumbs = !maze.displayBreadcrumbs;
-                    }
-                }
-                // check win condition and stop the user from being able to move
-                if (maze.playerPosition == new Vector2(maze.width - 1, maze.height - 1) && !maze.gameWon)
-                {
-                    maze.gameWon = true;
-                    acceptInput = false;
-
-                    if (!highScoreRecorded)
-                    {
-                        var scoreEntry = new Dictionary<string, object>
-                        {
-                            { "score", maze.score },
-                            { "time", elapsedTime },
-                            { "size", $"{maze.width}x{maze.height}" }
-                        };
-                        highScores.Add(scoreEntry);
-
-                        // Optional: Sort the highScores list based on time or score
-                        highScores = highScores.OrderBy(entry => entry["score"]).ToList();
-
-                        highScoreRecorded = true;
-                    }
-                }
-            }
-
+        protected override void Update(GameTime gameTime)
+        {
+            var currentKeyboardState = Keyboard.GetState();
+            ProcessMainMenuInput(currentKeyboardState);
+            processInGameInput(currentKeyboardState);
             previousKeyboardState = currentKeyboardState;
             base.Update(gameTime);
         }
@@ -278,29 +287,25 @@ namespace CS5410
             }
             else if (currentState == GameState.Playing)
             {
-                if (maze != null)
+                maze.Draw(m_spriteBatch, wallTexture, GraphicsDevice, m_ness, m_mrsaturn, m_dog, m_grass, m_poo);
+                if (maze.gameWon)
                 {
-                    maze.Draw(m_spriteBatch, wallTexture, GraphicsDevice, m_ness, m_mrsaturn, m_dog, m_grass, m_poo);
-
-                    if (maze.gameWon)
-                    {
-                        string winMessage = "You Won!";
-                        Vector2 messageSize = m_font.MeasureString(winMessage);
-                        Vector2 messagePosition = new Vector2(GraphicsDevice.Viewport.Width / 2 - messageSize.X / 2, GraphicsDevice.Viewport.Height / 2 - messageSize.Y / 2);
-                        m_spriteBatch.DrawString(m_font, winMessage, messagePosition, Color.Yellow);
-                    }
-                    // Top-centered text
-                    string timeText = $"Time: {elapsedTime.Minutes:D2}:{elapsedTime.Seconds:D2} / Score: {maze.score}";
-                    Vector2 playingTextSize = m_font.MeasureString(timeText);
-                    Vector2 playingTextPosition = new Vector2((GraphicsDevice.Viewport.Width - playingTextSize.X) / 2, 5);
-                    DrawText(timeText, playingTextPosition, Color.Black, Color.Cornsilk);
-
-                    // Bottom-centered text
-                    string bottomText = "F7 to navigate to main menu";
-                    Vector2 bottomTextSize = m_font.MeasureString(bottomText);
-                    Vector2 bottomTextPosition = new Vector2((GraphicsDevice.Viewport.Width - bottomTextSize.X) / 2, GraphicsDevice.Viewport.Height - bottomTextSize.Y - 5); // 20 pixels from the bottom
-                    DrawText(bottomText, bottomTextPosition, Color.Black, Color.Cornsilk);
+                    string winMessage = "You Won!";
+                    Vector2 messageSize = m_font.MeasureString(winMessage);
+                    Vector2 messagePosition = new Vector2(GraphicsDevice.Viewport.Width / 2 - messageSize.X / 2, GraphicsDevice.Viewport.Height / 2 - messageSize.Y / 2);
+                    m_spriteBatch.DrawString(m_font, winMessage, messagePosition, Color.Yellow);
                 }
+                // Top-centered text
+                string timeText = $"Time: {elapsedTime.Minutes:D2}:{elapsedTime.Seconds:D2} / Score: {maze.score}";
+                Vector2 playingTextSize = m_font.MeasureString(timeText);
+                Vector2 playingTextPosition = new Vector2((GraphicsDevice.Viewport.Width - playingTextSize.X) / 2, 5);
+                DrawText(timeText, playingTextPosition, Color.Black, Color.Cornsilk);
+
+                // Bottom-centered text
+                string bottomText = "F7 to navigate to main menu";
+                Vector2 bottomTextSize = m_font.MeasureString(bottomText);
+                Vector2 bottomTextPosition = new Vector2((GraphicsDevice.Viewport.Width - bottomTextSize.X) / 2, GraphicsDevice.Viewport.Height - bottomTextSize.Y - 5); // 20 pixels from the bottom
+                DrawText(bottomText, bottomTextPosition, Color.Black, Color.Cornsilk);
             }
             else if (currentState == GameState.HighScores)
             {
@@ -316,7 +321,6 @@ namespace CS5410
                 Vector2 highScoresPosition = new Vector2((GraphicsDevice.Viewport.Width - highScoresSize.X) / 2, (GraphicsDevice.Viewport.Height - highScoresSize.Y) / 2);
                 DrawText(highScoresText, highScoresPosition, Color.Black, Color.Cornsilk);
             }
-
             else if (currentState == GameState.Credits)
             {
                 string creditsText = "Credits\nProgramming: Tyler Johnston\nArtwork: Nintendo";
