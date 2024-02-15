@@ -17,6 +17,7 @@ namespace CS5410
         private GameState currentState = GameState.MainMenu;
 
         private SpriteBatch m_spriteBatch;
+        private int m_cellSize = 30;
         private Maze maze;
         private Texture2D wallTexture;
         private Texture2D m_ness;
@@ -52,7 +53,7 @@ namespace CS5410
             m_dog = this.Content.Load<Texture2D>("Images/dog");
             m_background = this.Content.Load<Texture2D>("Images/background");
             m_grass = this.Content.Load<Texture2D>("Images/grass");
-            m_font = this.Content.Load<SpriteFont>("Fonts/DemoFont1");
+            m_font = this.Content.Load<SpriteFont>("Fonts/PixelifySans");
         }
 
         protected override void Update(GameTime gameTime)
@@ -107,6 +108,13 @@ namespace CS5410
                 Console.WriteLine("Display Credits - implement UI update accordingly");
             }
 
+            // Back to Main Menu
+            if (currentKeyboardState.IsKeyDown(Keys.F7) && previousKeyboardState.IsKeyUp(Keys.F7))
+            {
+                maze = null;
+                currentState = GameState.MainMenu;
+            }
+
             if (currentState == GameState.MainMenu)
             {
                 if (currentKeyboardState.IsKeyDown(Keys.Enter) && previousKeyboardState.IsKeyUp(Keys.Enter))
@@ -124,7 +132,6 @@ namespace CS5410
                 {
                     maze.hint = maze.shortestPath.Peek();
                 }
-
                 if ((currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyUp(Keys.Right)) || (currentKeyboardState.IsKeyDown(Keys.D) && previousKeyboardState.IsKeyUp(Keys.D)))
                 {
                     newPosition += new Vector2(1, 0);
@@ -186,11 +193,9 @@ namespace CS5410
 
         private void AdjustWindowSize(int mazeWidth, int mazeHeight)
         {
-            int cellSize = 30; // Assuming each cell in your maze is 30x30 pixels
-            int width = mazeWidth * cellSize;
-            int height = mazeHeight * cellSize;
+            int width = mazeWidth * m_cellSize;
+            int height = mazeHeight * m_cellSize;
 
-            // Optionally add some padding or account for UI elements outside the maze
             int padding = 100;
             width += padding;
             height += padding;
@@ -200,29 +205,46 @@ namespace CS5410
             m_graphics.ApplyChanges();
         }
 
-        private void DrawText(string text, Vector2 position)
+        private void DrawText(string text, Vector2 position, Color textColor, Color backgroundColor)
         {
-            m_spriteBatch.DrawString(m_font, text, position, Color.White);
+            Vector2 textSize = m_font.MeasureString(text);
+            int padding = 5;
+            Rectangle backgroundRectangle = new Rectangle((int)position.X - padding, (int)position.Y - padding, (int)textSize.X + 2 * padding, (int)textSize.Y + 2 * padding);
+            // Draw the background
+            m_spriteBatch.Draw(wallTexture, backgroundRectangle, backgroundColor);
+            // Draw the text
+            m_spriteBatch.DrawString(m_font, text, position, textColor);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             m_spriteBatch.Begin();
+            m_spriteBatch.Draw(m_background, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
 
             if (currentState == GameState.MainMenu)
             {
-                string menuText = "F1 - 5x5\nF2 - 10x10\nF3 - 15x15\nF4 - 20x20\nF5 - Display High Score\nF6 - Display Credits";
+                string menuText = "Earthbound Maze Game\nF1 - 5x5\nF2 - 10x10\nF3 - 15x15\nF4 - 20x20\nF5 - Display High Score\nF6 - Display Credits";
                 Vector2 textSize = m_font.MeasureString(menuText);
                 Vector2 textPosition = new Vector2((GraphicsDevice.Viewport.Width - textSize.X) / 2, (GraphicsDevice.Viewport.Height - textSize.Y) / 2);
-                DrawText(menuText, textPosition);
+                DrawText(menuText, textPosition, Color.Black, Color.Cornsilk);
             }
             else if (currentState == GameState.Playing)
             {
-                m_spriteBatch.Draw(m_background, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
                 if (maze != null)
                 {
                     maze.Draw(m_spriteBatch, wallTexture, GraphicsDevice, m_ness, m_mrsaturn, m_dog, m_grass);
+                    // Top-centered text
+                    string playingText = "Current Maze";
+                    Vector2 playingTextSize = m_font.MeasureString(playingText);
+                    Vector2 playingTextPosition = new Vector2((GraphicsDevice.Viewport.Width - playingTextSize.X) / 2, 5);
+                    DrawText(playingText, playingTextPosition, Color.Black, Color.Cornsilk);
+
+                    // Bottom-centered text
+                    string bottomText = "F7 to navigate to main menu";
+                    Vector2 bottomTextSize = m_font.MeasureString(bottomText);
+                    Vector2 bottomTextPosition = new Vector2((GraphicsDevice.Viewport.Width - bottomTextSize.X) / 2, GraphicsDevice.Viewport.Height - bottomTextSize.Y - 5); // 20 pixels from the bottom
+                    DrawText(bottomText, bottomTextPosition, Color.Black, Color.Cornsilk);
                 }
             }
             m_spriteBatch.End();

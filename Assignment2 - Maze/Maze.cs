@@ -13,6 +13,7 @@ public class Maze
     private const int RIGHT = 1;
     private const int BOTTOM = 2;
     private const int LEFT = 3;
+    private const int m_cellSize = 30;
     public Stack<Vector2> shortestPath;
 
     public HashSet<Vector2> breadcrumbs;
@@ -267,13 +268,11 @@ public class Maze
 
     public void Draw(SpriteBatch spriteBatch, Texture2D wallTexture, GraphicsDevice graphicsDevice, Texture2D m_ness, Texture2D m_mrsaturn, Texture2D m_dog, Texture2D m_grass)
     {
-        int cellSize = 30;
         Color wallColor = Color.Black;
-        Color pathColor = Color.LightGreen;
 
         // Calculate total size of the maze
-        int mazeWidth = width * cellSize;
-        int mazeHeight = height * cellSize;
+        int mazeWidth = width * m_cellSize;
+        int mazeHeight = height * m_cellSize;
 
         // Calculate the starting position to center the maze
         int offsetX = (graphicsDevice.Viewport.Width - mazeWidth) / 2;
@@ -283,41 +282,41 @@ public class Maze
         {
             for (int y = 0; y < height; y++)
             {
-                Vector2 position = new Vector2(x * cellSize + offsetX, y * cellSize + offsetY);
-                spriteBatch.Draw(m_grass, new Rectangle((int)position.X, (int)position.Y, cellSize, cellSize), Color.White);
+                Vector2 position = new Vector2(x * m_cellSize + offsetX, y * m_cellSize + offsetY);
+                spriteBatch.Draw(m_grass, new Rectangle((int)position.X, (int)position.Y, m_cellSize, m_cellSize), Color.White);
                 if (displayShortestPath && shortestPath.Contains(new Vector2(x, y)))
                 {
-                    float scaleForDog = cellSize / (float)Math.Max(m_dog.Width, m_dog.Height);
+                    float scaleForDog = m_cellSize / (float)Math.Max(m_dog.Width, m_dog.Height);
                     spriteBatch.Draw(m_dog, position, null, Color.White, 0f, Vector2.Zero, scaleForDog, SpriteEffects.None, 0f);
                 }
                 if (displayBreadcrumbs && breadcrumbs.Contains(new Vector2(x,y)))
                 {
-                    float scaleForMrSaturn = cellSize / (float)Math.Max(m_mrsaturn.Width, m_mrsaturn.Height);
+                    float scaleForMrSaturn = m_cellSize / (float)Math.Max(m_mrsaturn.Width, m_mrsaturn.Height);
                     spriteBatch.Draw(m_mrsaturn, position, null, Color.White, 0f, Vector2.Zero, scaleForMrSaturn, SpriteEffects.None, 0f);
                 }
                 if (displayHint && hint == new Vector2(x, y))
                 {
-                    float scaleForMrSaturn = cellSize / (float)Math.Max(m_mrsaturn.Width, m_mrsaturn.Height);
+                    float scaleForMrSaturn = m_cellSize / (float)Math.Max(m_mrsaturn.Width, m_mrsaturn.Height);
                     spriteBatch.Draw(m_mrsaturn, position, null, Color.White, 0f, Vector2.Zero, scaleForMrSaturn, SpriteEffects.None, 0f);
                 }
                 if (cells[x, y].Walls[TOP])
                 {
-                    spriteBatch.Draw(wallTexture, new Rectangle((int)position.X, (int)position.Y, cellSize, 1), wallColor);
+                    spriteBatch.Draw(wallTexture, new Rectangle((int)position.X, (int)position.Y, m_cellSize, 1), wallColor);
                 }
                 if (cells[x, y].Walls[RIGHT])
                 {
-                    spriteBatch.Draw(wallTexture, new Rectangle((int)(position.X + cellSize), (int)position.Y, 1, cellSize), wallColor);
+                    spriteBatch.Draw(wallTexture, new Rectangle((int)(position.X + m_cellSize), (int)position.Y, 1, m_cellSize), wallColor);
                 }
                 if (cells[x, y].Walls[BOTTOM])
                 {
-                    spriteBatch.Draw(wallTexture, new Rectangle((int)position.X, (int)(position.Y + cellSize), cellSize, 1), wallColor);
+                    spriteBatch.Draw(wallTexture, new Rectangle((int)position.X, (int)(position.Y + m_cellSize), m_cellSize, 1), wallColor);
                 }
                 if (cells[x, y].Walls[LEFT])
                 {
-                    spriteBatch.Draw(wallTexture, new Rectangle((int)position.X, (int)position.Y, 1, cellSize), wallColor);
+                    spriteBatch.Draw(wallTexture, new Rectangle((int)position.X, (int)position.Y, 1, m_cellSize), wallColor);
                 }
-                float scale = (float)cellSize / Math.Max(m_ness.Width, m_ness.Height);
-                Vector2 playerScreenPosition = new Vector2(playerPosition.X * cellSize + offsetX, playerPosition.Y * cellSize + offsetY);
+                float scale = (float)m_cellSize / Math.Max(m_ness.Width, m_ness.Height);
+                Vector2 playerScreenPosition = new Vector2(playerPosition.X * m_cellSize + offsetX, playerPosition.Y * m_cellSize + offsetY);
                 spriteBatch.Draw(m_ness, playerScreenPosition, null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
             }
         }
