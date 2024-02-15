@@ -168,6 +168,17 @@ namespace CS5410
                     {
                         if (maze.CanMoveTo(newPosition))
                         {
+                            if (!maze.breadcrumbs.Contains(newPosition))
+                            {
+                                if (maze.shortestPath.Contains(newPosition))
+                                {
+                                    maze.score += 5;
+                                }
+                                else
+                                {
+                                    maze.score -= 2;
+                                }
+                            }
                             if (!maze.shortestPath.Contains(newPosition))
                             {
                                 maze.shortestPath.Push(previousPosition);
@@ -205,24 +216,22 @@ namespace CS5410
                     maze.gameWon = true;
                     acceptInput = false;
 
-                    // Only add to high scores if not already recorded for this game
                     if (!highScoreRecorded)
                     {
-                        // Add the current game's score and time to the high scores list
                         var scoreEntry = new Dictionary<string, object>
                         {
-                            { "score", 0 }, // Score is 0 for now
-                            { "time", elapsedTime } // Elapsed time of current game
+                            { "score", maze.score },
+                            { "time", elapsedTime },
+                            { "size", $"{maze.width}x{maze.height}" }
                         };
                         highScores.Add(scoreEntry);
 
                         // Optional: Sort the highScores list based on time or score
-                        highScores = highScores.OrderBy(entry => entry["time"]).ToList();
+                        highScores = highScores.OrderBy(entry => entry["score"]).ToList();
 
-                        highScoreRecorded = true; // Mark as recorded
+                        highScoreRecorded = true;
                     }
                 }
-
             }
 
             previousKeyboardState = currentKeyboardState;
@@ -281,7 +290,7 @@ namespace CS5410
                         m_spriteBatch.DrawString(m_font, winMessage, messagePosition, Color.Yellow);
                     }
                     // Top-centered text
-                    string timeText = $"Time: {elapsedTime.Minutes:D2}:{elapsedTime.Seconds:D2}";
+                    string timeText = $"Time: {elapsedTime.Minutes:D2}:{elapsedTime.Seconds:D2} / Score: {maze.score}";
                     Vector2 playingTextSize = m_font.MeasureString(timeText);
                     Vector2 playingTextPosition = new Vector2((GraphicsDevice.Viewport.Width - playingTextSize.X) / 2, 5);
                     DrawText(timeText, playingTextPosition, Color.Black, Color.Cornsilk);
@@ -299,13 +308,15 @@ namespace CS5410
                 foreach (var entry in highScores)
                 {
                     TimeSpan time = (TimeSpan)entry["time"];
-                    highScoresText += $"Score: {entry["score"]}, Time: {time.Minutes:D2}:{time.Seconds:D2}\n";
+                    string size = (string)entry["size"]; // Retrieve the size
+                    highScoresText += $"Size: {size}, Score: {entry["score"]}, Time: {time.Minutes:D2}:{time.Seconds:D2}\n";
                 }
 
                 Vector2 highScoresSize = m_font.MeasureString(highScoresText);
                 Vector2 highScoresPosition = new Vector2((GraphicsDevice.Viewport.Width - highScoresSize.X) / 2, (GraphicsDevice.Viewport.Height - highScoresSize.Y) / 2);
                 DrawText(highScoresText, highScoresPosition, Color.Black, Color.Cornsilk);
             }
+
             else if (currentState == GameState.Credits)
             {
                 string creditsText = "Credits\nProgramming: Tyler Johnston\nArtwork: Nintendo";

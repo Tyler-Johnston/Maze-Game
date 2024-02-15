@@ -13,6 +13,7 @@ public class Maze
 
     public HashSet<Vector2> breadcrumbs;
     public Vector2 hint;
+    public int score = 0;
     public bool displayShortestPath = false;
     public bool displayHint = false;
     public bool displayBreadcrumbs = false;
