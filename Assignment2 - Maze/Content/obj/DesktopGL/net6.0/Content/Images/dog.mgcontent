@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/Content/Images/dog.webp</SourceFile>
-  <SourceTime>2024-02-14T16:24:00.1254385-07:00</SourceTime>
-  <DestFile>/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/Content/bin/DesktopGL/Content/Images/dog.xnb</DestFile>
-  <DestTime>2024-02-14T16:25:34.2096705-07:00</DestTime>
+  <SourceFile>/Users/tyler/cs5410-maze-game/Assignment2 - Maze/Content/Images/dog.webp</SourceFile>
+  <SourceTime>2024-02-15T15:56:14.4720384-07:00</SourceTime>
+  <DestFile>/Users/tyler/cs5410-maze-game/Assignment2 - Maze/Content/bin/DesktopGL/Content/Images/dog.xnb</DestFile>
+  <DestTime>2024-02-15T15:56:39.1818092-07:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2022-07-26T05:44:56-06:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/Assignment2 - Maze.csproj": {}
+    "/Users/tyler/cs5410-maze-game/Assignment2 - Maze/Assignment2 - Maze.csproj": {}
   },
   "projects": {
-    "/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/Assignment2 - Maze.csproj": {
+    "/Users/tyler/cs5410-maze-game/Assignment2 - Maze/Assignment2 - Maze.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/Assignment2 - Maze.csproj",
+        "projectUniqueName": "/Users/tyler/cs5410-maze-game/Assignment2 - Maze/Assignment2 - Maze.csproj",
         "projectName": "Assignment2 - Maze",
-        "projectPath": "/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/Assignment2 - Maze.csproj",
+        "projectPath": "/Users/tyler/cs5410-maze-game/Assignment2 - Maze/Assignment2 - Maze.csproj",
         "packagesPath": "/Users/tyler/.nuget/packages/",
-        "outputPath": "/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/obj/",
+        "outputPath": "/Users/tyler/cs5410-maze-game/Assignment2 - Maze/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/tyler/.nuget/NuGet/NuGet.Config"

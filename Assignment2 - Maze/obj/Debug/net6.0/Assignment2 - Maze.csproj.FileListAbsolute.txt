@@ -33,3 +33,38 @@
 /Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/bin/Debug/net6.0/Content/Fonts/DemoFont1.xnb
 /Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/bin/Debug/net6.0/Content/Fonts/PixelifySans.xnb
 /Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/bin/Debug/net6.0/Content/Images/poo.xnb
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/bin/Debug/net6.0/Content/Fonts/DemoFont1.xnb
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/bin/Debug/net6.0/Content/Fonts/PixelifySans.xnb
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/bin/Debug/net6.0/Content/Images/background.xnb
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/bin/Debug/net6.0/Content/Images/dog.xnb
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/bin/Debug/net6.0/Content/Images/grass.xnb
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/bin/Debug/net6.0/Content/Images/mrsaturn.xnb
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/bin/Debug/net6.0/Content/Images/ness.xnb
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/bin/Debug/net6.0/Content/Images/poo.xnb
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/bin/Debug/net6.0/Content/Images/starman.xnb
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/bin/Debug/net6.0/Assignment2 - Maze
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/bin/Debug/net6.0/Assignment2 - Maze.deps.json
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/bin/Debug/net6.0/Assignment2 - Maze.runtimeconfig.json
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/bin/Debug/net6.0/Assignment2 - Maze.dll
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/bin/Debug/net6.0/Assignment2 - Maze.pdb
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/bin/Debug/net6.0/MonoGame.Framework.dll
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/bin/Debug/net6.0/runtimes/linux-x64/native/libSDL2-2.0.so.0
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/bin/Debug/net6.0/runtimes/linux-x64/native/libopenal.so.1
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/bin/Debug/net6.0/runtimes/osx/native/libSDL2.dylib
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/bin/Debug/net6.0/runtimes/osx/native/libopenal.1.dylib
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/bin/Debug/net6.0/runtimes/win-x64/native/SDL2.dll
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/bin/Debug/net6.0/runtimes/win-x64/native/soft_oal.dll
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/bin/Debug/net6.0/runtimes/win-x86/native/SDL2.dll
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/bin/Debug/net6.0/runtimes/win-x86/native/soft_oal.dll
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/obj/Debug/net6.0/Assignment2 - Maze.csproj.AssemblyReference.cache
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/obj/Debug/net6.0/Assignment2 - Maze.GeneratedMSBuildEditorConfig.editorconfig
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/obj/Debug/net6.0/Assignment2 - Maze.AssemblyInfoInputs.cache
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/obj/Debug/net6.0/Assignment2 - Maze.AssemblyInfo.cs
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/obj/Debug/net6.0/Assignment2 - Maze.csproj.CoreCompileInputs.cache
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/obj/Debug/net6.0/Assignment2 - Maze.sourcelink.json
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/obj/Debug/net6.0/Assignment2 - Maze.csproj.CopyComplete
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/obj/Debug/net6.0/Assignment2 - Maze.dll
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/obj/Debug/net6.0/refint/Assignment2 - Maze.dll
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/obj/Debug/net6.0/Assignment2 - Maze.pdb
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/obj/Debug/net6.0/Assignment2 - Maze.genruntimeconfig.cache
+/Users/tyler/cs5410-maze-game/Assignment2 - Maze/obj/Debug/net6.0/ref/Assignment2 - Maze.dll

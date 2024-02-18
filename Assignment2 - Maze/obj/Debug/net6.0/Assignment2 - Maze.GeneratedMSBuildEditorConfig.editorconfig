@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Assignment2_-_Maze
-build_property.ProjectDir = /Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/
+build_property.ProjectDir = /Users/tyler/cs5410-maze-game/Assignment2 - Maze/
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

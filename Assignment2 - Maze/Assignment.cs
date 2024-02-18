@@ -272,64 +272,87 @@ namespace CS5410
             m_spriteBatch.DrawString(m_font, text, position, textColor);
         }
 
-        protected override void Draw(GameTime gameTime)
+        private void DrawMainMenu()
+        {
+            string menuText = "Earthbound Maze Game\nF1 - 5x5\nF2 - 10x10\nF3 - 15x15\nF4 - 20x20\nF5 - Display High Score\nF6 - Display Credits\nEsc - Exit";
+            Vector2 textSize = m_font.MeasureString(menuText);
+            Vector2 textPosition = new Vector2((GraphicsDevice.Viewport.Width - textSize.X) / 2, (GraphicsDevice.Viewport.Height - textSize.Y) / 2);
+            DrawText(menuText, textPosition, Color.Black, Color.Cornsilk);
+        }
+
+
+        private void DrawPlaying()
+        {
+            maze.Draw(m_spriteBatch, wallTexture, GraphicsDevice, m_ness, m_mrsaturn, m_dog, m_grass, m_poo);
+            if (maze.gameWon)
+            {
+                string winMessage = "You Won!";
+                Vector2 messageSize = m_font.MeasureString(winMessage);
+                Vector2 messagePosition = new Vector2(GraphicsDevice.Viewport.Width / 2 - messageSize.X / 2, GraphicsDevice.Viewport.Height / 2 - messageSize.Y / 2);
+                m_spriteBatch.DrawString(m_font, winMessage, messagePosition, Color.Yellow);
+            }
+            // Top-centered text
+            string timeText = $"Time: {elapsedTime.Minutes:D2}:{elapsedTime.Seconds:D2} / Score: {maze.score}";
+            Vector2 playingTextSize = m_font.MeasureString(timeText);
+            Vector2 playingTextPosition = new Vector2((GraphicsDevice.Viewport.Width - playingTextSize.X) / 2, 5);
+            DrawText(timeText, playingTextPosition, Color.Black, Color.Cornsilk);
+
+            // Bottom-centered text
+            string bottomText = "F7 to navigate to main menu";
+            Vector2 bottomTextSize = m_font.MeasureString(bottomText);
+            Vector2 bottomTextPosition = new Vector2((GraphicsDevice.Viewport.Width - bottomTextSize.X) / 2, GraphicsDevice.Viewport.Height - bottomTextSize.Y - 5); // 20 pixels from the bottom
+            DrawText(bottomText, bottomTextPosition, Color.Black, Color.Cornsilk);
+        }
+
+        private void DrawHighScores()
+        {
+            string highScoresText = "High Scores:\n";
+            foreach (var entry in highScores)
+            {
+                TimeSpan time = (TimeSpan)entry["time"];
+                string size = (string)entry["size"]; // Retrieve the size
+                highScoresText += $"Size: {size}, Score: {entry["score"]}, Time: {time.Minutes:D2}:{time.Seconds:D2}\n";
+            }
+
+            Vector2 highScoresSize = m_font.MeasureString(highScoresText);
+            Vector2 highScoresPosition = new Vector2((GraphicsDevice.Viewport.Width - highScoresSize.X) / 2, (GraphicsDevice.Viewport.Height - highScoresSize.Y) / 2);
+            DrawText(highScoresText, highScoresPosition, Color.Black, Color.Cornsilk);
+        }
+
+        private void DrawCredits()
+        {
+            string creditsText = "Credits\nProgramming: Tyler Johnston\nArtwork: Nintendo";
+            Vector2 creditsSize = m_font.MeasureString(creditsText);
+            Vector2 creditsPosition = new Vector2((GraphicsDevice.Viewport.Width - creditsSize.X) / 2, (GraphicsDevice.Viewport.Height - creditsSize.Y) / 2);
+            DrawText(creditsText, creditsPosition, Color.Black, Color.Cornsilk);
+        }
+
+
+       protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             m_spriteBatch.Begin();
             m_spriteBatch.Draw(m_background, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
 
-            if (currentState == GameState.MainMenu)
+            switch (currentState)
             {
-                string menuText = "Earthbound Maze Game\nF1 - 5x5\nF2 - 10x10\nF3 - 15x15\nF4 - 20x20\nF5 - Display High Score\nF6 - Display Credits\nEsc - Exit";
-                Vector2 textSize = m_font.MeasureString(menuText);
-                Vector2 textPosition = new Vector2((GraphicsDevice.Viewport.Width - textSize.X) / 2, (GraphicsDevice.Viewport.Height - textSize.Y) / 2);
-                DrawText(menuText, textPosition, Color.Black, Color.Cornsilk);
+                case GameState.MainMenu:
+                    DrawMainMenu();
+                    break;
+                case GameState.Playing:
+                    DrawPlaying();
+                    break;
+                case GameState.HighScores:
+                    DrawHighScores();
+                    break;
+                case GameState.Credits:
+                    DrawCredits();
+                    break;
             }
-            else if (currentState == GameState.Playing)
-            {
-                maze.Draw(m_spriteBatch, wallTexture, GraphicsDevice, m_ness, m_mrsaturn, m_dog, m_grass, m_poo);
-                if (maze.gameWon)
-                {
-                    string winMessage = "You Won!";
-                    Vector2 messageSize = m_font.MeasureString(winMessage);
-                    Vector2 messagePosition = new Vector2(GraphicsDevice.Viewport.Width / 2 - messageSize.X / 2, GraphicsDevice.Viewport.Height / 2 - messageSize.Y / 2);
-                    m_spriteBatch.DrawString(m_font, winMessage, messagePosition, Color.Yellow);
-                }
-                // Top-centered text
-                string timeText = $"Time: {elapsedTime.Minutes:D2}:{elapsedTime.Seconds:D2} / Score: {maze.score}";
-                Vector2 playingTextSize = m_font.MeasureString(timeText);
-                Vector2 playingTextPosition = new Vector2((GraphicsDevice.Viewport.Width - playingTextSize.X) / 2, 5);
-                DrawText(timeText, playingTextPosition, Color.Black, Color.Cornsilk);
 
-                // Bottom-centered text
-                string bottomText = "F7 to navigate to main menu";
-                Vector2 bottomTextSize = m_font.MeasureString(bottomText);
-                Vector2 bottomTextPosition = new Vector2((GraphicsDevice.Viewport.Width - bottomTextSize.X) / 2, GraphicsDevice.Viewport.Height - bottomTextSize.Y - 5); // 20 pixels from the bottom
-                DrawText(bottomText, bottomTextPosition, Color.Black, Color.Cornsilk);
-            }
-            else if (currentState == GameState.HighScores)
-            {
-                string highScoresText = "High Scores:\n";
-                foreach (var entry in highScores)
-                {
-                    TimeSpan time = (TimeSpan)entry["time"];
-                    string size = (string)entry["size"]; // Retrieve the size
-                    highScoresText += $"Size: {size}, Score: {entry["score"]}, Time: {time.Minutes:D2}:{time.Seconds:D2}\n";
-                }
-
-                Vector2 highScoresSize = m_font.MeasureString(highScoresText);
-                Vector2 highScoresPosition = new Vector2((GraphicsDevice.Viewport.Width - highScoresSize.X) / 2, (GraphicsDevice.Viewport.Height - highScoresSize.Y) / 2);
-                DrawText(highScoresText, highScoresPosition, Color.Black, Color.Cornsilk);
-            }
-            else if (currentState == GameState.Credits)
-            {
-                string creditsText = "Credits\nProgramming: Tyler Johnston\nArtwork: Nintendo";
-                Vector2 creditsSize = m_font.MeasureString(creditsText);
-                Vector2 creditsPosition = new Vector2((GraphicsDevice.Viewport.Width - creditsSize.X) / 2, (GraphicsDevice.Viewport.Height - creditsSize.Y) / 2);
-                DrawText(creditsText, creditsPosition, Color.Black, Color.Cornsilk);
-            }
             m_spriteBatch.End();
             base.Draw(gameTime);
         }
+
     }
 }

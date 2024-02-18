@@ -4,14 +4,14 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/Content/Images/ness.png</File>
-    <File>/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/Content/Images/mrsaturn.png</File>
-    <File>/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/Content/Images/starman.png</File>
-    <File>/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/Content/Images/dog.webp</File>
-    <File>/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/Content/Images/background.jpg</File>
-    <File>/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/Content/Images/grass.png</File>
-    <File>/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/Content/Images/poo.png</File>
-    <File>/Users/tyler/Education/spring2024/gamedev/Assignment2 - Maze/Assignment2 - Maze/Content/Fonts/PixelifySans.spritefont</File>
+    <File>/Users/tyler/cs5410-maze-game/Assignment2 - Maze/Content/Images/ness.png</File>
+    <File>/Users/tyler/cs5410-maze-game/Assignment2 - Maze/Content/Images/mrsaturn.png</File>
+    <File>/Users/tyler/cs5410-maze-game/Assignment2 - Maze/Content/Images/starman.png</File>
+    <File>/Users/tyler/cs5410-maze-game/Assignment2 - Maze/Content/Images/dog.webp</File>
+    <File>/Users/tyler/cs5410-maze-game/Assignment2 - Maze/Content/Images/background.jpg</File>
+    <File>/Users/tyler/cs5410-maze-game/Assignment2 - Maze/Content/Images/grass.png</File>
+    <File>/Users/tyler/cs5410-maze-game/Assignment2 - Maze/Content/Images/poo.png</File>
+    <File>/Users/tyler/cs5410-maze-game/Assignment2 - Maze/Content/Fonts/PixelifySans.spritefont</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />
