@@ -6,18 +6,17 @@ using Microsoft.Xna.Framework.Graphics;
 
 public class Maze
 {
-    public Cell[,] cells;
-    public int width, height;
-    public Vector2 playerPosition;
-    public Stack<Vector2> shortestPath;
-
+    private Cell[,] cells;
+    private int width, height;
+    private Vector2 playerPosition;
+    private Stack<Vector2> shortestPath;
     public HashSet<Vector2> breadcrumbs;
     public Vector2 hint;
-    public int score = 0;
-    public bool displayShortestPath = false;
-    public bool displayHint = false;
-    public bool displayBreadcrumbs = false;
-    public bool gameWon = false;
+    private int score = 0;
+    private bool displayShortestPath = false;
+    private bool displayHint = false;
+    private bool displayBreadcrumbs = false;
+    private bool gameWon = false;
     private Random rand = new Random();
     private const int TOP = 0;
     private const int RIGHT = 1;
@@ -37,6 +36,61 @@ public class Maze
         {
             new Vector2(0, 0)
         };
+    }
+
+
+    public int Width
+    {
+        get { return width; }
+        set { width = value; }
+    }
+
+    public int Height
+    {
+        get { return height; }
+        set { height = value; }
+    }
+
+    public Vector2 PlayerPosition
+    {
+        get { return playerPosition; }
+        set { playerPosition = value; }
+    }
+
+    public Stack<Vector2> ShortestPath
+    {
+        get { return shortestPath; }
+        set { shortestPath = value; }
+    }
+
+    public bool DisplayShortestPath
+    {
+        get { return displayShortestPath; }
+        set { displayShortestPath = value; }
+    }
+
+    public bool DisplayHint
+    {
+        get { return displayHint; }
+        set { displayHint = value; }
+    }
+
+    public bool DisplayBreadcrumbs
+    {
+        get { return displayBreadcrumbs; }
+        set { displayBreadcrumbs = value; }
+    }
+
+    public int Score
+    {
+        get { return score; }
+        set { score = value; }
+    }
+
+    public bool GameWon
+    {
+        get { return gameWon; }
+        set { gameWon = value; }
     }
 
     private void InitializeCells()

@@ -37,7 +37,6 @@ namespace CS5410
         private List<Dictionary<string, object>> highScores = new List<Dictionary<string, object>>();
         private bool highScoreRecorded = false;
 
-
         public Assignment()
         {
             m_graphics = new GraphicsDeviceManager(this);
@@ -75,13 +74,13 @@ namespace CS5410
                 return;
             }
   
-            Vector2 newPosition = maze.playerPosition;
-            Vector2 previousPosition = maze.playerPosition;
+            Vector2 newPosition = maze.PlayerPosition;
+            Vector2 previousPosition = maze.PlayerPosition;
             elapsedTime = DateTime.Now - startTime;
             
-            if (maze.shortestPath.Count > 0)
+            if (maze.ShortestPath.Count > 0)
             {
-                maze.hint = maze.shortestPath.Peek();
+                maze.hint = maze.ShortestPath.Peek();
             }
             if ((currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyUp(Keys.Right)) || (currentKeyboardState.IsKeyDown(Keys.D) && previousKeyboardState.IsKeyUp(Keys.D)))
             {
@@ -101,69 +100,68 @@ namespace CS5410
             }
 
             // Check if the new position is within the maze bounds
-            if (newPosition.X >= 0 && newPosition.X < maze.width && newPosition.Y >= 0 && newPosition.Y < maze.height)
+            if (newPosition.X >= 0 && newPosition.X < maze.Width && newPosition.Y >= 0 && newPosition.Y < maze.Height)
             {
                 if (maze.CanMoveTo(newPosition))
                 {
                     if (!maze.breadcrumbs.Contains(newPosition))
                     {
-                        if (maze.shortestPath.Contains(newPosition))
+                        if (maze.ShortestPath.Contains(newPosition))
                         {
-                            maze.score += 5;
+                            maze.Score += 5;
                         }
                         else
                         {
-                            maze.score -= 2;
+                            maze.Score -= 2;
                         }
                     }
-                    if (!maze.shortestPath.Contains(newPosition))
+                    if (!maze.ShortestPath.Contains(newPosition))
                     {
-                        maze.shortestPath.Push(previousPosition);
+                        maze.ShortestPath.Push(previousPosition);
                     }
-                    maze.playerPosition = newPosition;
+                    maze.PlayerPosition = newPosition;
                     maze.breadcrumbs.Add(newPosition);
                 }
             }
-            if (maze.shortestPath.Contains(maze.playerPosition))
+            if (maze.ShortestPath.Contains(maze.PlayerPosition))
             {
-                maze.shortestPath.Pop();
+                maze.ShortestPath.Pop();
             }
 
             // Toggle display of the shortest path on 'P' key press
             if (currentKeyboardState.IsKeyDown(Keys.P) && previousKeyboardState.IsKeyUp(Keys.P))
             {
-                maze.displayShortestPath = !maze.displayShortestPath;
+                maze.DisplayShortestPath = !maze.DisplayShortestPath;
             }
 
             // Toggle hint display
             if (currentKeyboardState.IsKeyDown(Keys.H) && previousKeyboardState.IsKeyUp(Keys.H))
             {
-                maze.displayHint = !maze.displayHint;
+                maze.DisplayHint = !maze.DisplayHint;
             }
 
             // Toggle breadcrumb  display
             if (currentKeyboardState.IsKeyDown(Keys.B) && previousKeyboardState.IsKeyUp(Keys.B))
             {
-                maze.displayBreadcrumbs = !maze.displayBreadcrumbs;
+                maze.DisplayBreadcrumbs = !maze.DisplayBreadcrumbs;
             }
             // check win condition and stop the user from being able to move
-            if (maze.playerPosition == new Vector2(maze.width - 1, maze.height - 1) && !maze.gameWon)
+            if (maze.PlayerPosition == new Vector2(maze.Width - 1, maze.Height - 1) && !maze.GameWon)
             {
-                maze.gameWon = true;
+                maze.GameWon = true;
                 acceptInput = false;
 
                 if (!highScoreRecorded)
                 {
                     var scoreEntry = new Dictionary<string, object>
                     {
-                        { "score", maze.score },
+                        { "score", maze.Score },
                         { "time", elapsedTime },
-                        { "size", $"{maze.width}x{maze.height}" }
+                        { "size", $"{maze.Width}x{maze.Height}" }
                     };
                     highScores.Add(scoreEntry);
 
-                    // Optional: Sort the highScores list based on time or score
-                    highScores = highScores.OrderBy(entry => entry["score"]).ToList();
+                    highScores = highScores.OrderByDescending(entry => entry["score"]).ToList();
 
                     highScoreRecorded = true;
                 }
@@ -284,7 +282,7 @@ namespace CS5410
         private void DrawPlaying()
         {
             maze.Draw(m_spriteBatch, wallTexture, GraphicsDevice, m_ness, m_mrsaturn, m_dog, m_grass, m_poo);
-            if (maze.gameWon)
+            if (maze.GameWon)
             {
                 string winMessage = "You Won!";
                 Vector2 messageSize = m_font.MeasureString(winMessage);
@@ -292,7 +290,7 @@ namespace CS5410
                 m_spriteBatch.DrawString(m_font, winMessage, messagePosition, Color.Yellow);
             }
             // Top-centered text
-            string timeText = $"Time: {elapsedTime.Minutes:D2}:{elapsedTime.Seconds:D2} / Score: {maze.score}";
+            string timeText = $"Time: {elapsedTime.Minutes:D2}:{elapsedTime.Seconds:D2} / Score: {maze.Score}";
             Vector2 playingTextSize = m_font.MeasureString(timeText);
             Vector2 playingTextPosition = new Vector2((GraphicsDevice.Viewport.Width - playingTextSize.X) / 2, 5);
             DrawText(timeText, playingTextPosition, Color.Black, Color.Cornsilk);
