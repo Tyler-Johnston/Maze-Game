@@ -80,7 +80,7 @@ namespace CS5410
             
             if (maze.ShortestPath.Count > 0)
             {
-                maze.hint = maze.ShortestPath.Peek();
+                maze.Hint = maze.ShortestPath.Peek();
             }
             if ((currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyUp(Keys.Right)) || (currentKeyboardState.IsKeyDown(Keys.D) && previousKeyboardState.IsKeyUp(Keys.D)))
             {
@@ -104,7 +104,7 @@ namespace CS5410
             {
                 if (maze.CanMoveTo(newPosition))
                 {
-                    if (!maze.breadcrumbs.Contains(newPosition))
+                    if (!maze.BreadCrumbs.Contains(newPosition))
                     {
                         if (maze.ShortestPath.Contains(newPosition))
                         {
@@ -120,7 +120,7 @@ namespace CS5410
                         maze.ShortestPath.Push(previousPosition);
                     }
                     maze.PlayerPosition = newPosition;
-                    maze.breadcrumbs.Add(newPosition);
+                    maze.BreadCrumbs.Add(newPosition);
                 }
             }
             if (maze.ShortestPath.Contains(maze.PlayerPosition))
