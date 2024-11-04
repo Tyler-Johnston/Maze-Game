@@ -1,0 +1,76 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/tyler/Desktop/cs5410-maze-game/Assignment2 - Maze/Assignment2 - Maze.csproj": {}
+  },
+  "projects": {
+    "/Users/tyler/Desktop/cs5410-maze-game/Assignment2 - Maze/Assignment2 - Maze.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/tyler/Desktop/cs5410-maze-game/Assignment2 - Maze/Assignment2 - Maze.csproj",
+        "projectName": "Assignment2 - Maze",
+        "projectPath": "/Users/tyler/Desktop/cs5410-maze-game/Assignment2 - Maze/Assignment2 - Maze.csproj",
+        "packagesPath": "/Users/tyler/.nuget/packages/",
+        "outputPath": "/Users/tyler/Desktop/cs5410-maze-game/Assignment2 - Maze/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/tyler/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "MonoGame.Content.Builder.Task": {
+              "target": "Package",
+              "version": "[3.8.1.303, )"
+            },
+            "MonoGame.Framework.DesktopGL": {
+              "target": "Package",
+              "version": "[3.8.1.303, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.204/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

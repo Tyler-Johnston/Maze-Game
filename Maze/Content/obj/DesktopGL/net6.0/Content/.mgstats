@@ -1,0 +1,9 @@
+Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"/Users/tyler/Desktop/cs5410-maze-game/Maze/Content/Fonts/PixelifySans.spritefont","/Users/tyler/Desktop/cs5410-maze-game/Maze/Content/bin/DesktopGL/Content/Fonts/PixelifySans.xnb","FontDescriptionProcessor","SpriteFontContent",2083,70687,0.061053
+"/Users/tyler/Desktop/cs5410-maze-game/Maze/Content/Images/background.jpg","/Users/tyler/Desktop/cs5410-maze-game/Maze/Content/bin/DesktopGL/Content/Images/background.xnb","TextureProcessor","Texture2DContent",1485476,8294485,0.124368
+"/Users/tyler/Desktop/cs5410-maze-game/Maze/Content/Images/dog.webp","/Users/tyler/Desktop/cs5410-maze-game/Maze/Content/bin/DesktopGL/Content/Images/dog.xnb","TextureProcessor","Texture2DContent",542,1814485,0.029412
+"/Users/tyler/Desktop/cs5410-maze-game/Maze/Content/Images/grass.png","/Users/tyler/Desktop/cs5410-maze-game/Maze/Content/bin/DesktopGL/Content/Images/grass.xnb","TextureProcessor","Texture2DContent",5040,5143909,0.051613
+"/Users/tyler/Desktop/cs5410-maze-game/Maze/Content/Images/mrsaturn.png","/Users/tyler/Desktop/cs5410-maze-game/Maze/Content/bin/DesktopGL/Content/Images/mrsaturn.xnb","TextureProcessor","Texture2DContent",7827,5474389,0.083699
+"/Users/tyler/Desktop/cs5410-maze-game/Maze/Content/Images/ness.png","/Users/tyler/Desktop/cs5410-maze-game/Maze/Content/bin/DesktopGL/Content/Images/ness.xnb","TextureProcessor","Texture2DContent",9723,1977221,0.126045
+"/Users/tyler/Desktop/cs5410-maze-game/Maze/Content/Images/poo.png","/Users/tyler/Desktop/cs5410-maze-game/Maze/Content/bin/DesktopGL/Content/Images/poo.xnb","TextureProcessor","Texture2DContent",61773,403285,0.006776
+"/Users/tyler/Desktop/cs5410-maze-game/Maze/Content/Images/starman.png","/Users/tyler/Desktop/cs5410-maze-game/Maze/Content/bin/DesktopGL/Content/Images/starman.xnb","TextureProcessor","Texture2DContent",8386,4046085,0.062095

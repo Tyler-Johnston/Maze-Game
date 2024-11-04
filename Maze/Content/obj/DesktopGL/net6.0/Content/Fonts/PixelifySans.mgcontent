@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SourceFile>/Users/tyler/Desktop/cs5410-maze-game/Maze/Content/Fonts/PixelifySans.spritefont</SourceFile>
+  <SourceTime>2024-11-03T21:22:04.5059285-07:00</SourceTime>
+  <DestFile>/Users/tyler/Desktop/cs5410-maze-game/Maze/Content/bin/DesktopGL/Content/Fonts/PixelifySans.xnb</DestFile>
+  <DestTime>2024-11-03T21:38:26.1318412-07:00</DestTime>
+  <Importer>FontDescriptionImporter</Importer>
+  <ImporterTime>2022-07-26T05:44:56-06:00</ImporterTime>
+  <Processor>FontDescriptionProcessor</Processor>
+  <ProcessorTime>2022-07-26T05:44:56-06:00</ProcessorTime>
+  <Parameters>
+    <Key>PremultiplyAlpha</Key>
+    <Value>True</Value>
+  </Parameters>
+  <Parameters>
+    <Key>TextureFormat</Key>
+    <Value>Compressed</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>
